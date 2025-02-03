@@ -1,5 +1,6 @@
 package com.alko.alkomod;
 
+import com.alko.alkomod.Items.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
@@ -35,12 +36,11 @@ public class Alkomod
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        ModItems.ITEMS.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
-
         modEventBus.addListener(this::addCreative);
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -51,14 +51,16 @@ public class Alkomod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if(event.getTabKey() == CreativeModeTabs.COMBAT){
+            event.accept(ModItems.URA_DEBUG);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
-
+        LOGGER.info("Server started MisterTwister");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
