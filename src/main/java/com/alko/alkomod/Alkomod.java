@@ -27,8 +27,7 @@ public class Alkomod
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "alko";
     // Directly reference a slf4j logger
-    //Юра UrinaMaster feet enjoyer
-    //Даня, ебать его в рот. =)
+
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
@@ -53,6 +52,7 @@ public class Alkomod
     {
         if(event.getTabKey() == CreativeModeTabs.COMBAT){
             event.accept(ModItems.URA_DEBUG);
+            event.accept(ModItems.FARE_DUMB);
         }
     }
 
