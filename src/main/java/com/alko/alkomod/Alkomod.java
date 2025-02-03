@@ -27,6 +27,7 @@ public class Alkomod
     public static final String MOD_ID = "alko";
     // Directly reference a slf4j logger
     //Юра UrinaMaster feet enjoyer
+    //Даня, ебать его в рот. =)
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
