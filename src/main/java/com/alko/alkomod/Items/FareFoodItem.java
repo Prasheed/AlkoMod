@@ -1,9 +1,14 @@
 package com.alko.alkomod.Items;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,5 +32,16 @@ public class FareFoodItem extends Item {
             }
         }
         return super.finishUsingItem(stack, level, entity);
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        if (!player.level().isClientSide) {
+            if (target instanceof ServerPlayer targetPlayer) {
+                targetPlayer.connection.disconnect(Component.literal("Это глобальный отсос")); // Кикаем игрока
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.PASS;
     }
 }
