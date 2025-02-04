@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "alko:block/generator_block"
+    }
+  }
+}

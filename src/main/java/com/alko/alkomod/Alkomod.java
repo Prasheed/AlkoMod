@@ -1,11 +1,10 @@
 package com.alko.alkomod;
 
 import com.alko.alkomod.Items.ModItems;
+import com.alko.alkomod.block.ModBlocks;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -16,8 +15,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -35,7 +32,9 @@ public class Alkomod
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        ModItems.ITEMS.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -54,6 +53,7 @@ public class Alkomod
             event.accept(ModItems.URA_DEBUG);
             event.accept(ModItems.FARE_DUMB);
             event.accept(ModItems.BASE_WINGS);
+            event.accept(ModBlocks.GENERATOR_BLOCK);
         }
     }
 

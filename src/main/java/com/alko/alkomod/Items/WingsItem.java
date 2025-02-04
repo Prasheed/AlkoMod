@@ -2,15 +2,15 @@ package com.alko.alkomod.Items;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class WingsItem extends ArmorItem {
+
+    private static final double VERTICAL_SPEED = 0.5; // Скорость подъема и спуска
 
     public WingsItem(Properties properties) {
         super(ArmorMaterials.DIAMOND, Type.CHESTPLATE, properties);
@@ -18,21 +18,26 @@ public class WingsItem extends ArmorItem {
 
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
-        if (!level.isClientSide && player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this) {
-            // Пример эффекта: даем игроку возможность летать
-            player.getAbilities().mayfly = true;
-            player.getAbilities().flying = true;
-            player.onUpdateAbilities();
+        if (!level.isClientSide) {
+            boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
 
-            // Пример эффекта: добавляем эффект медленного падения
-            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 200, 0));
-        } else {
-            // Если крылья сняты, отключаем возможность летать
-            if (!player.isCreative() && !player.isSpectator()) {
-                player.getAbilities().mayfly = false;
-                player.getAbilities().flying = false;
+            if (isWearing) {
+                player.getAbilities().mayfly = true;
                 player.onUpdateAbilities();
+            } else {
+                if (!player.isCreative() && !player.isSpectator()) {
+                    player.getAbilities().mayfly = false;
+                    player.getAbilities().flying = false;
+                    player.onUpdateAbilities();
+                }
             }
+        }
+
+        // Логика управления полетом должна быть только на клиенте!
+        if (level.isClientSide && player.getAbilities().flying) {
+            Vec3 motion = player.getDeltaMovement();
+
+
         }
     }
 }
