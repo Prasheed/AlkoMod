@@ -26,6 +26,9 @@ public class TitleScreenMixin {
                 if(button.getMessage().contains(Component.translatable("menu.singleplayer"))){
                     button.setMessage(Component.literal("Одиночная игра нахрен"));
                 }
+                if(button.getMessage().contains(Component.translatable("menu.multiplayer"))){
+                    button.setMessage(Component.literal("Подсосаться"));
+                }
             }
         });
     }
