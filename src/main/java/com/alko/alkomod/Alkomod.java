@@ -53,6 +53,7 @@ public class Alkomod
         if(event.getTabKey() == CreativeModeTabs.COMBAT){
             event.accept(ModItems.URA_DEBUG);
             event.accept(ModItems.FARE_DUMB);
+            event.accept(ModItems.BASE_WINGS);
         }
     }
 
