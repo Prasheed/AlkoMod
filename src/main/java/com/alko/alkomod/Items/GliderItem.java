@@ -1,7 +1,12 @@
 package com.alko.alkomod.Items;
 
+import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.alko.alkomod.mixin.LivingEntityAccessorMixin;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.Input;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -31,27 +36,42 @@ public class GliderItem extends ArmorItem {
     public void onArmorTick(ItemStack stack, Level level, Player player) {
         boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
         boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
-        AttributeInstance speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        System.out.println(player.getSpeed());
-        System.out.println(player.isFallFlying());
+        //Input input = Minecraft.getInstance().player.input;
+        //System.out.println(player.getSpeed());
 
         CompoundTag tag = stack.getOrCreateTag();
 
         if (tag.contains("duration") && tag.contains("isGlideSpeedMod")){
             if (tag.getFloat("duration") > 0f) {
                 if (isWearing && isJumping && !player.onGround()) {
-                    if (player.tickCount % 20 == 0) {
-                        tag.putFloat("duration", tag.getFloat("duration") - 1f);
-                    }
+                    if (player.tickCount % 20 == 0) tag.putFloat("duration", tag.getFloat("duration") - 1f);
                     if (player.isCrouching()) {
-
                         if(!tag.getBoolean("isGlideSpeedMod")){
                             player.setSpeed((float) (player.getSpeed() + 1.4));
                             tag.putBoolean("isGlideSpeedMod", true);
                         }
 
                         Vec3 currentMotion = player.getDeltaMovement();
-                        player.setDeltaMovement(currentMotion.x, 0, currentMotion.z);
+                        player.setDeltaMovement(currentMotion.x,0,currentMotion.z);
+                        float speed = 0.2f;
+                        if (PlayerInputHandler.isHoldingUp(player)) {
+                            player.moveRelative(1, new Vec3(0, 0, speed));
+                        }
+                        if (PlayerInputHandler.isHoldingDown(player)) {
+                            player.moveRelative(1, new Vec3(0, 0, -speed * 0.8F));
+                        }
+                        if (PlayerInputHandler.isHoldingLeft(player)) {
+                            player.moveRelative(1, new Vec3(speed, 0, 0));
+                        }
+                        if (PlayerInputHandler.isHoldingRight(player)) {
+                            player.moveRelative(1, new Vec3(-speed, 0, 0));
+                        }
+                        if (!player.getCommandSenderWorld().isClientSide()) {
+                            player.fallDistance = 0.0F;
+//                            if (player instanceof ServerPlayer) {
+//                                ((ServerPlayer) player).connection.aboveGroundTickCount = 0;
+//                            }
+                        }
 
                     } else {
                         if(tag.getBoolean("isGlideSpeedMod")){
@@ -65,9 +85,12 @@ public class GliderItem extends ArmorItem {
                     }
                 }
             } else {
+
                 Vec3 currentMotion = player.getDeltaMovement();
                 player.setDeltaMovement(currentMotion.x, -0.2, currentMotion.z);
+
             }
+
 
         } else {
             tag.putFloat("duration", FLY_DURATION);
@@ -79,4 +102,8 @@ public class GliderItem extends ArmorItem {
         }
     }
 
+    private void fly(Player player, double y) {
+        Vec3 motion = player.getDeltaMovement();
+        player.setDeltaMovement(motion.get(Direction.Axis.X), y, motion.get(Direction.Axis.Z));
+    }
 }

@@ -2,6 +2,7 @@ package com.alko.alkomod;
 
 import com.alko.alkomod.Items.ModItems;
 import com.alko.alkomod.block.ModBlocks;
+import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -38,6 +39,7 @@ public class Alkomod
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new PlayerInputHandler());
         modEventBus.addListener(this::addCreative);
     }
 
