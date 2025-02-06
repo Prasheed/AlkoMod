@@ -24,7 +24,7 @@ import java.util.UUID;
 public class GliderItem extends ArmorItem {
 
     private final float FLY_DURATION = 5f;
-    private final float GLIDE_SPEED = 20f;
+    private final float GLIDE_SPEED = 0.2f;
     private static final UUID GLIDE_SPEED_MODIFIER_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     public GliderItem(Item.Properties properties) {
@@ -53,18 +53,18 @@ public class GliderItem extends ArmorItem {
 
                         Vec3 currentMotion = player.getDeltaMovement();
                         player.setDeltaMovement(currentMotion.x,0,currentMotion.z);
-                        float speed = 0.2f;
+
                         if (PlayerInputHandler.isHoldingUp(player)) {
-                            player.moveRelative(1, new Vec3(0, 0, speed));
+                            player.moveRelative(1, new Vec3(0, 0, GLIDE_SPEED));
                         }
                         if (PlayerInputHandler.isHoldingDown(player)) {
-                            player.moveRelative(1, new Vec3(0, 0, -speed * 0.8F));
+                            player.moveRelative(1, new Vec3(0, 0, -GLIDE_SPEED * 0.8F));
                         }
                         if (PlayerInputHandler.isHoldingLeft(player)) {
-                            player.moveRelative(1, new Vec3(speed, 0, 0));
+                            player.moveRelative(1, new Vec3(GLIDE_SPEED, 0, 0));
                         }
                         if (PlayerInputHandler.isHoldingRight(player)) {
-                            player.moveRelative(1, new Vec3(-speed, 0, 0));
+                            player.moveRelative(1, new Vec3(-GLIDE_SPEED, 0, 0));
                         }
                         if (!player.getCommandSenderWorld().isClientSide()) {
                             player.fallDistance = 0.0F;
