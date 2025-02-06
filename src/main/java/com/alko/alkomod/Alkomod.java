@@ -53,6 +53,7 @@ public class Alkomod
             event.accept(ModItems.URA_DEBUG);
             event.accept(ModItems.FARE_DUMB);
             event.accept(ModItems.BASE_WINGS);
+            event.accept(ModItems.GLIDER);
             event.accept(ModBlocks.GENERATOR_BLOCK);
         }
     }

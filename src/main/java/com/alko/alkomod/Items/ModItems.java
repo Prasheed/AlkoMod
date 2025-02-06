@@ -17,6 +17,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> BASE_WINGS = ITEMS.register("base_wings", () -> new WingsItem(new Item.Properties()));
 
+    public static final RegistryObject<Item> GLIDER = ITEMS.register("glider", () -> new GliderItem(new Item.Properties()));
+
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }
