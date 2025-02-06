@@ -42,7 +42,6 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent evt) {
         if (evt.phase == TickEvent.Phase.END) {
-            System.out.println("aaawdawdawd");
             updateInputAndSend();
         }
     }

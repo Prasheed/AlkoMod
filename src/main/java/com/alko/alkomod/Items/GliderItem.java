@@ -24,7 +24,7 @@ import java.util.UUID;
 public class GliderItem extends ArmorItem {
 
     private final float FLY_DURATION = 5f;
-    private final float GLIDE_SPEED = 0.2f;
+    private final float GLIDE_SPEED = 0.1f;
     private static final UUID GLIDE_SPEED_MODIFIER_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     public GliderItem(Item.Properties properties) {

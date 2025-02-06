@@ -35,11 +35,6 @@ public class SInputUpdate {
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(()->{
-            System.out.println("up" + this.up);
-            System.out.println("down" + this.down);
-            System.out.println("left" + this.left);
-            System.out.println("right" + this.right);
-            System.out.println("/////////////");
             Player player = context.get().getSender();
             if(player != null){
                 PlayerInputHandler.update(player, this.up, this.down, this.left, this.right);

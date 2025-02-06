@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "alko:block/generator_block",
+      "y": 90
+    },
+    "facing=north": {
       "model": "alko:block/generator_block"
+    },
+    "facing=south": {
+      "model": "alko:block/generator_block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "alko:block/generator_block",
+      "y": 270
     }
   }
 }
