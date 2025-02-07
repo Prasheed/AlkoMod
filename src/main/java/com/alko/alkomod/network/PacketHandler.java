@@ -18,7 +18,8 @@ public class PacketHandler {
     );
 
     public static void register() {
-        INSTANCE.messageBuilder(SInputUpdate.class, 1, NetworkDirection.PLAY_TO_SERVER)
+        int id = 0;
+        INSTANCE.messageBuilder(SInputUpdate.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(SInputUpdate::encode)
                 .decoder(SInputUpdate::new)
                 .consumerMainThread(SInputUpdate::handle)
