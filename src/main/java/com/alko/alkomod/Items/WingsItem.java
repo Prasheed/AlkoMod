@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 public class WingsItem extends ArmorItem {
 
     public WingsItem(Properties properties) {
-        super(ArmorMaterials.DIAMOND, Type.CHESTPLATE, properties);
+        super(ModArmorMaterials.ANGEL_WINGS, Type.CHESTPLATE, properties);
     }
     private final float FLY_DURATION = 5f;
 
