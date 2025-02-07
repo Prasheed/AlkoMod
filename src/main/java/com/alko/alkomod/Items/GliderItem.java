@@ -2,15 +2,8 @@ package com.alko.alkomod.Items;
 
 import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.alko.alkomod.mixin.LivingEntityAccessorMixin;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.Input;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
@@ -100,10 +93,5 @@ public class GliderItem extends ArmorItem {
         if (player.onGround()){
             tag.putFloat("duration", FLY_DURATION);
         }
-    }
-
-    private void fly(Player player, double y) {
-        Vec3 motion = player.getDeltaMovement();
-        player.setDeltaMovement(motion.get(Direction.Axis.X), y, motion.get(Direction.Axis.Z));
     }
 }

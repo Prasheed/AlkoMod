@@ -14,6 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
@@ -23,6 +24,7 @@ import java.util.function.Consumer;
 
 public class WingsItem extends ArmorItem implements GeoItem {
     private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private final float FLY_DURATION = 5f;
 
     public WingsItem(Properties properties) {
         super(ModArmorMaterials.ANGEL_WINGS, Type.CHESTPLATE, properties);
@@ -46,42 +48,65 @@ public class WingsItem extends ArmorItem implements GeoItem {
     }
 
     private PlayState predicate(AnimationState animationState) {
-        animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+        LivingEntity entity = (LivingEntity) animationState.getData(DataTickets.ENTITY);
+
+        if (entity != null) {
+            ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
+            if (itemStack.hasTag()) {
+                CompoundTag nbt = itemStack.getTag();
+
+                int animation_id = nbt.getInt("animation_id");
+
+                switch (animation_id){
+                    case 0:
+                        animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+                    case 1:
+                        animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
+                    case 2:
+                        animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
+                }
+
+            } else {
+                animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+            }
+        }
+
         return PlayState.CONTINUE;
     }
 
-    private final float FLY_DURATION = 5f;
 
     @SuppressWarnings("deprecation")
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
         boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
         boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
-        System.out.println(player.onGround());
 
         CompoundTag tag = stack.getOrCreateTag();
 
-        if (tag.contains("duration")){
-
+        if (tag.contains("duration") && tag.contains("animation_id")){
             if (isWearing && isJumping && !player.onGround()){
-                System.out.println(tag.getFloat("duration"));
-
                 if (tag.getFloat("duration") >= 0.0F) {
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
-
+                    tag.putInt("animation_id", 1);
+                    tag.putBoolean("isFlying", true);
                     if(player.tickCount % 20 == 0){
                         tag.putFloat("duration", tag.getFloat("duration")-1f);
                     }
                 } else {
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, -0.05, currentMotion.z);
+                    tag.putInt("animation_id", 2);
                 }
             }
-        }else tag.putFloat("duration", FLY_DURATION);
+        }else{
+            tag.putFloat("duration", FLY_DURATION);
+            tag.putInt("animation_id", 0);
+        }
 
         if (player.onGround()){
             tag.putFloat("duration", FLY_DURATION);
+            tag.putInt("animation_id", 0);
         }
     }
 

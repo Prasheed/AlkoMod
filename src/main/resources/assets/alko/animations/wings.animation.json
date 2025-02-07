@@ -3,6 +3,82 @@
 	"animations": {
 		"idle": {
 			"loop": true
+		},
+		"fly": {
+			"loop": true,
+			"animation_length": 1.25,
+			"bones": {
+				"2bone": {
+					"rotation": {
+						"0.0": {
+							"vector": [22.5, 30, 0]
+						},
+						"0.5": {
+							"vector": [20, -17, -18],
+							"easing": "easeInBack"
+						},
+						"1.25": {
+							"vector": [22.5, 30, 0]
+						}
+					}
+				},
+				"3bone": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 70, 0],
+							"easing": "easeInBack"
+						},
+						"0.6667": {
+							"vector": [0, 22.5, 0]
+						},
+						"0.9167": {
+							"vector": [0, -2.5, 0],
+							"easing": "easeOutBack"
+						},
+						"1.25": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"2bone2": {
+					"rotation": {
+						"0.0": {
+							"vector": [22.5, -30, 0]
+						},
+						"0.5": {
+							"vector": [20, 17, 18],
+							"easing": "easeInBack"
+						},
+						"1.25": {
+							"vector": [22.5, -30, 0]
+						}
+					}
+				},
+				"3bone2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, -70, 0],
+							"easing": "easeInBack"
+						},
+						"0.6667": {
+							"vector": [0, -22.5, 0]
+						},
+						"0.9167": {
+							"vector": [0, 2.5, 0],
+							"easing": "easeOutBack"
+						},
+						"1.25": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2
