@@ -1,14 +1,16 @@
 package com.alko.alkomod.block.blockentity;
 
 import com.alko.alkomod.Alkomod;
+import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SimpleEnergyGeneratorBlockEntity extends BlockEntity {
+public class SimpleEnergyGeneratorBlockEntity extends BlockEntity implements TickableBlockEntity {
 
     private int counter;
+    private int ticks;
 
     public SimpleEnergyGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.SIMPLE_GENERATOR_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -37,5 +39,16 @@ public class SimpleEnergyGeneratorBlockEntity extends BlockEntity {
 
     public int getCounter(){
         return this.counter;
+    }
+
+    @Override
+    public void tick() {
+        if(this.level == null || this.level.isClientSide()) return;
+
+
+
+
+
+        ticks++;
     }
 }

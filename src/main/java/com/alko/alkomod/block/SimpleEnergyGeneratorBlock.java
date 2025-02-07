@@ -3,6 +3,7 @@ package com.alko.alkomod.block;
 
 import com.alko.alkomod.block.blockentity.ModBlockEntities;
 import com.alko.alkomod.block.blockentity.SimpleEnergyGeneratorBlockEntity;
+import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -74,6 +75,6 @@ public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock imple
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : (level, blockPos, blockState, blockEntity) -> (SimpleEnergyGeneratorBlockEntity)blockEntity.tick();
+        return TickableBlockEntity.getTickerHelper(pLevel);
     }
 }
