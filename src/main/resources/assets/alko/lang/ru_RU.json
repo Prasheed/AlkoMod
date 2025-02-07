@@ -3,5 +3,6 @@
   "item.alko.fare_dumb": "Фаре дурачек",
   "block.alko.generator_block": "Поршневой двигатель нахер",
   "item.alko.base_wings": "Крылья",
-  "item.alko.glider" : "Глайдер"
+  "item.alko.glider" : "Глайдер",
+  "block.alko.simple_energy_generator_block" : "Простой генератор энергии"
 }
