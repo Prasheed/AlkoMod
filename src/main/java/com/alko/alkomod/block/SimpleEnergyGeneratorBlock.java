@@ -46,12 +46,20 @@ public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock imple
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if(be instanceof SimpleEnergyGeneratorBlockEntity blockEntity) {
-                int counter = player.isCrouching() ? blockEntity.getCounter() : blockEntity.increaseCounter();
-                player.sendSystemMessage(Component.literal("Блок был нажат %d раз".formatted(counter)));
-                return InteractionResult.sidedSuccess(level.isClientSide());
+        BlockEntity be = level.getBlockEntity(pos);
+        if (hand == InteractionHand.MAIN_HAND){
+            if(!level.isClientSide()) {
+                if(be instanceof SimpleEnergyGeneratorBlockEntity blockEntity) {
+                    int counter = player.isCrouching() ? blockEntity.getCounter() : blockEntity.increaseCounter();
+                    player.sendSystemMessage(Component.literal("Блок был нажат %d раз на сервере".formatted(counter)));
+                    return InteractionResult.sidedSuccess(level.isClientSide());
+                }
+            }else{
+                if(be instanceof SimpleEnergyGeneratorBlockEntity blockEntity) {
+                    int counter = player.isCrouching() ? blockEntity.getCounter() : blockEntity.increaseCounter();
+                    player.sendSystemMessage(Component.literal("Блок был нажат %d раз на клиенте".formatted(counter)));
+                    return InteractionResult.sidedSuccess(level.isClientSide());
+                }
             }
         }
 
