@@ -38,6 +38,7 @@ public class SInputUpdate {
             Player player = context.get().getSender();
             if(player != null){
                 PlayerInputHandler.update(player, this.up, this.down, this.left, this.right);
+                System.out.println("updated");
             }
         });
         context.get().setPacketHandled(true);
