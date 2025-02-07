@@ -13,6 +13,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -68,5 +70,10 @@ public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock imple
     @Override
     public BlockState mirror(BlockState pState, Mirror pMirror) {
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    }
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return pLevel.isClientSide() ? null : (level, blockPos, blockState, blockEntity) -> (SimpleEnergyGeneratorBlockEntity)blockEntity.tick();
     }
 }
