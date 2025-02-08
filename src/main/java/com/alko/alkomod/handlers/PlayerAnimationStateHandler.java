@@ -26,21 +26,22 @@ public class PlayerAnimationStateHandler {
         return allPlayerAnimationStates.get(uuid);
     }
 
-    public static void changeValueFromPlayerMap(UUID uuid, Player player, String key, String value){
+    public static void changeValueFromPlayerMap(Player player, String key, String value, boolean toServer){
+        UUID uuid = player.getUUID();
         HashMap<String, String> map = allPlayerAnimationStates.get(uuid);
-        if(map == null) map = new HashMap<String, String>();
-
-        if(!map.getOrDefault(key, "idle").equals(value)){
-            if(player!=null) {
-                //PacketHandler.sendToTrackingAndSelf(new CAnimationStateUpdate(player.getUUID(), key, value), player);
-                if(player.level().isClientSide()){
-                    PacketHandler.sendToServer(new SAnimationStateUpdate(player.getUUID(), key, value));
-                }else{
-                    PacketHandler.sendToTrackingAndSelf(new CAnimationStateUpdate(player.getUUID(), key, value), player);
-                }
+        if(allPlayerAnimationStates.getOrDefault(player.getUUID(),new HashMap<>()).get(key).equals(value)) return;
+        if(player!=null){
+            if(!toServer){
+                System.out.println("Отправлено на сервер");
+                PacketHandler.sendToServer(new SAnimationStateUpdate(player.getUUID(),key,value));
+                allPlayerAnimationStates.getOrDefault(uuid, new HashMap<>()).put(key, value);
+            }else{
+                System.out.println("Отправлено на клиент");
+                PacketHandler.sendToTrackingAndSelf(new CAnimationStateUpdate(player.getUUID(),key,value),player);
+                allPlayerAnimationStates.getOrDefault(uuid, new HashMap<>()).put(key, value);
             }
-            allPlayerAnimationStates.getOrDefault(uuid, new HashMap<String, String>()).put(key, value);
         }
+        //allPlayerAnimationStates.getOrDefault(uuid, new HashMap<String, String>()).put(key, value);
     }
 
     public static String getPlayerAnimationStateFromKey(UUID uuid, String key){

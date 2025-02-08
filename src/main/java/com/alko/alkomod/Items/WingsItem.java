@@ -58,6 +58,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
 
         UUID uuid = player.getUUID();
         String state = PlayerAnimationStateHandler.getPlayerAnimationStateFromKey(uuid,"angel_wings");
+
         switch (state){
             case "flying":
                 animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
@@ -80,18 +81,16 @@ public class WingsItem extends ArmorItem implements GeoItem {
         CompoundTag tag = stack.getTag();
         if (tag.contains("duration")){
             if (PlayerInputHandler.isHoldingSpace(player)){
-
                 if (tag.getInt("duration") > 0){
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
                     // ТУТ
-                    System.out.println(tag.getInt("duration"));
-                    if(level.isClientSide())PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "flying");
+                    if(level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player,"angel_wings", "flying",true);
                     if (player.tickCount % 20 == 0){
                         tag.putInt("duration", tag.getInt("duration") - 1);
                     }
                 }else{
-                    if(level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "gliding");
+                    if(level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player,"angel_wings", "gliding",true);
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, -0.2, currentMotion.z);
                     // ТУТ
@@ -100,7 +99,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
             }
             // ТУТ
             if (player.onGround() && level.isClientSide())
-                PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(), player, "angel_wings", "idle");
+                PlayerAnimationStateHandler.changeValueFromPlayerMap(player, "angel_wings", "idle", true);
             if (tag.getInt("duration") != 0 || tag.getInt("duration") <= 0)
                 if (player.onGround()) {
                     tag.putInt("duration", (int) FLY_DURATION);

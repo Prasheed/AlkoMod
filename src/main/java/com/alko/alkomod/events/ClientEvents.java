@@ -31,7 +31,7 @@ public class ClientEvents {
     private static boolean lastDownState = false;
     private static boolean lastLeftState = false;
     private static boolean lastRightState = false;
-    private static boolean hasHandled = false;
+
 
 //    @SubscribeEvent
 //    public static void inputEvent(InputEvent.Key event){
@@ -46,17 +46,7 @@ public class ClientEvents {
 //        System.out.println("right "+input.right);
 //        //PacketHandler.sendToServer(new SInputUpdate(input.up, input.down, input.left, input.right));
 //    }
-    @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        if (!hasHandled && event.getEntity() instanceof LocalPlayer) {
-            LocalPlayer player = (LocalPlayer) event.getEntity();
-            // Получаем UUID игрока
-            UUID playerUUID = player.getUUID();
-            PlayerAnimationStateHandler.init(playerUUID);
 
-            hasHandled = true; // Устанавливаем флаг, чтобы не обрабатывать событие повторно
-        }
-    }
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent evt) {

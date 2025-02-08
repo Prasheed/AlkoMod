@@ -31,8 +31,8 @@ public class SAnimationStateUpdate {
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(()->{
-            System.out.println("Пакет обновления анимации "+ this.key + " " + this.value);
-            PlayerAnimationStateHandler.changeValueFromPlayerMap(this.uuid,context.get().getSender(), this.key,this.value);
+            System.out.println("Пакет обновления анимации на сервере у "+context.get().getSender().getDisplayName().getString()+" "+ this.key + " " + this.value);
+            PlayerAnimationStateHandler.changeValueFromPlayerMap(context.get().getSender(), this.key,this.value,false);
         });
         context.get().setPacketHandled(true);
     }

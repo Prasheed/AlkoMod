@@ -34,8 +34,8 @@ public class CAnimationStateUpdate {
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(()->{
-            System.out.println("Пакет обновления анимации "+ this.key + " " + this.value);
-            PlayerAnimationStateHandler.changeValueFromPlayerMap(this.uuid,null, this.key,this.value);
+            System.out.println("Пакет обновления анимации на клиенте"+ this.key + " " + this.value);
+            PlayerAnimationStateHandler.changeValueFromPlayerMap(null, this.key,this.value,false);
         });
         context.get().setPacketHandled(true);
     }
