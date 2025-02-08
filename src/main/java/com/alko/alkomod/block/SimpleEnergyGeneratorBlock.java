@@ -4,6 +4,7 @@ package com.alko.alkomod.block;
 import com.alko.alkomod.block.blockentity.ModBlockEntities;
 import com.alko.alkomod.block.blockentity.SimpleEnergyGeneratorBlockEntity;
 import com.alko.alkomod.capability.PlayerAnimationCapabilityProvider;
+import com.alko.alkomod.handlers.PlayerAnimationStateHandler;
 import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,6 +24,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.stream.Stream;
 
 public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
@@ -55,7 +58,9 @@ public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock imple
 //                        String value = cap.getAnimationStateMap().get("angel_wings");
 //                        System.out.println("Прочтено " + value);
 //                    });
-                    player.sendSystemMessage(Component.literal(player.getUUID().toString()));
+                    PlayerAnimationStateHandler.allPlayerAnimationStates.forEach((key, value)->{
+                        player.sendSystemMessage(Component.literal(key.toString()+" "+value));
+                    });
                 }
             }
         }
