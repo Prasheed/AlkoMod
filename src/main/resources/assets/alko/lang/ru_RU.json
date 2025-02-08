@@ -4,7 +4,7 @@
   "block.alko.generator_block": "Поршневой двигатель нахер",
   "item.alko.base_wings": "Крылья",
   "item.alko.glider" : "Глайдер",
-  "itemGroup.alkomod.tab" : "Алко Мод"
+  "itemGroup.alkomod.tab" : "Алко Мод",
   "item.alko.glider" : "Глайдер",
   "block.alko.simple_energy_generator_block" : "Простой генератор энергии"
 }
