@@ -4,6 +4,7 @@ import com.alko.alkomod.Items.client.WingsArmorRenderer;
 import com.alko.alkomod.mixin.LivingEntityAccessorMixin;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -82,34 +83,36 @@ public class WingsItem extends ArmorItem implements GeoItem {
     @SuppressWarnings("deprecation")
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
-        boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
-        boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
+        if(!level.isClientSide()){
 
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.contains("duration") && tag.contains("animation_id")){
-            if (isWearing && isJumping && !player.onGround()){
-                if (tag.getFloat("duration") >= 0.0F) {
-                    Vec3 currentMotion = player.getDeltaMovement();
-                    player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
-                    tag.putInt("animation_id", 1);
-                    tag.putBoolean("isFlying", true);
-                    if(player.tickCount % 20 == 0){
-                        tag.putFloat("duration", tag.getFloat("duration")-1f);
+            boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
+            boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
+            System.out.println(isWearing + " " + isJumping);
+            CompoundTag tag = stack.getOrCreateTag();
+            if (tag.contains("duration") && tag.contains("animation_id")){
+                if (isWearing && isJumping && !player.onGround()){
+                    if (tag.getFloat("duration") >= 0.0F) {
+                        Vec3 currentMotion = player.getDeltaMovement();
+                        player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
+                        tag.putInt("animation_id", 1);
+                        if(player.tickCount % 20 == 0){
+                            tag.putFloat("duration", tag.getFloat("duration")-1f);
+                        }
+                    } else {
+                        Vec3 currentMotion = player.getDeltaMovement();
+                        player.setDeltaMovement(currentMotion.x, -0.05, currentMotion.z);
+                        tag.putInt("animation_id", 2);
                     }
-                } else {
-                    Vec3 currentMotion = player.getDeltaMovement();
-                    player.setDeltaMovement(currentMotion.x, -0.05, currentMotion.z);
-                    tag.putInt("animation_id", 2);
                 }
+            }else{
+                tag.putFloat("duration", FLY_DURATION);
+                tag.putInt("animation_id", 0);
             }
-        }else{
-            tag.putFloat("duration", FLY_DURATION);
-            tag.putInt("animation_id", 0);
-        }
 
-        if (player.onGround()){
-            tag.putFloat("duration", FLY_DURATION);
-            tag.putInt("animation_id", 0);
+            if (player.onGround()){
+                tag.putFloat("duration", FLY_DURATION);
+                tag.putInt("animation_id", 0);
+            }
         }
     }
 
