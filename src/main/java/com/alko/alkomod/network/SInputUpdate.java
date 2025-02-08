@@ -8,13 +8,14 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class SInputUpdate {
-
+    private boolean space;
     private boolean up;
     private boolean down;
     private boolean left;
     private boolean right;
 
-    public SInputUpdate(boolean up, boolean down, boolean left, boolean right){
+    public SInputUpdate(boolean space,boolean up, boolean down, boolean left, boolean right){
+        this.space = space;
         this.up = up;
         this.down = down;
         this.left = left;
@@ -22,10 +23,11 @@ public class SInputUpdate {
     }
 
     public SInputUpdate(FriendlyByteBuf buf){
-        this(buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
+        this(buf.readBoolean(),buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
     }
 
     public void encode(FriendlyByteBuf buf) {
+        buf.writeBoolean(this.space);
         buf.writeBoolean(this.up);
         buf.writeBoolean(this.down);
         buf.writeBoolean(this.left);
@@ -37,7 +39,7 @@ public class SInputUpdate {
         context.get().enqueueWork(()->{
             Player player = context.get().getSender();
             if(player != null){
-                PlayerInputHandler.update(player, this.up, this.down, this.left, this.right);
+                PlayerInputHandler.update(player, this.space, this.up, this.down, this.left, this.right);
             }
         });
         context.get().setPacketHandled(true);

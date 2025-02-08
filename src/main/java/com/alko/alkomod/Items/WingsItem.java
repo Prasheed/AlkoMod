@@ -1,7 +1,11 @@
 package com.alko.alkomod.Items;
 
 import com.alko.alkomod.Items.client.WingsArmorRenderer;
+import com.alko.alkomod.handlers.PlayerAnimationStateHandler;
+import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.alko.alkomod.mixin.LivingEntityAccessorMixin;
+import com.alko.alkomod.network.CAnimationStateUpdate;
+import com.alko.alkomod.network.PacketHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +25,7 @@ import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInst
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class WingsItem extends ArmorItem implements GeoItem {
@@ -49,34 +54,20 @@ public class WingsItem extends ArmorItem implements GeoItem {
     }
 
     private PlayState predicate(AnimationState animationState) {
-        LivingEntity entity = (LivingEntity) animationState.getData(DataTickets.ENTITY);
-        if(entity instanceof Player player){
-            System.out.println(player.getDisplayName());
-        }
+        Player player = (Player) animationState.getData(DataTickets.ENTITY);
 
-        if (entity != null) {
-            ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-
-            if (itemStack.hasTag()) {
-                CompoundTag nbt = itemStack.getTag();
-
-                int animation_id = nbt.getInt("animation_id");
-
-                switch (animation_id){
-                    case 1:
-                        animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
-                        break;
-                    case 2:
-                        animationState.getController().setAnimation(RawAnimation.begin().then("gliding", Animation.LoopType.LOOP));
-                        break;
-                    default:
-                        animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
-                        break;
-                }
-
-            } else {
+        UUID uuid = player.getUUID();
+        String state = PlayerAnimationStateHandler.getPlayerAnimationStateFromKey(uuid,"angel_wings");
+        switch (state){
+            case "flying":
+                animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
+                break;
+            case "gliding":
+                animationState.getController().setAnimation(RawAnimation.begin().then("gliding", Animation.LoopType.LOOP));
+                break;
+            default:
                 animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
-            }
+                break;
         }
 
         return PlayState.CONTINUE;
@@ -86,32 +77,36 @@ public class WingsItem extends ArmorItem implements GeoItem {
     @SuppressWarnings("deprecation")
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
-        boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
-        boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.contains("duration") && tag.contains("animation_id")){
-            if (isWearing && isJumping && !player.onGround()){
-                if (tag.getFloat("duration") >= 0.0F) {
+        CompoundTag tag = stack.getTag();
+        if (tag.contains("duration")){
+            if (PlayerInputHandler.isHoldingSpace(player)){
+
+                if (tag.getInt("duration") > 0){
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
-                    tag.putInt("animation_id", 1);
-                    if(player.tickCount % 20 == 0){
-                        tag.putFloat("duration", tag.getFloat("duration")-1f);
+                    // ТУТ
+                    System.out.println(tag.getInt("duration"));
+                    if(!level.isClientSide())PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "flying");
+                    if (player.tickCount % 20 == 0){
+                        tag.putInt("duration", tag.getInt("duration") - 1);
                     }
-                } else {
+                }else{
+                    if(!level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "gliding");
                     Vec3 currentMotion = player.getDeltaMovement();
-                    player.setDeltaMovement(currentMotion.x, -0.05, currentMotion.z);
-                    tag.putInt("animation_id", 2);
+                    player.setDeltaMovement(currentMotion.x, -0.2, currentMotion.z);
+                    // ТУТ
                 }
-            }
-        }else{
-            tag.putFloat("duration", FLY_DURATION);
-            tag.putInt("animation_id", 0);
-        }
 
-        if (player.onGround()){
-            tag.putFloat("duration", FLY_DURATION);
-            tag.putInt("animation_id", 0);
+            }
+            // ТУТ
+            if (player.onGround() && !level.isClientSide())
+                PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(), player, "angel_wings", "idle");
+            if (tag.getInt("duration") != 0 || tag.getInt("duration") <= 0)
+                if (player.onGround()) {
+                    tag.putInt("duration", (int) FLY_DURATION);
+                }
+        }else{
+            tag.putInt("duration", (int) FLY_DURATION);
         }
     }
 

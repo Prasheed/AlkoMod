@@ -9,10 +9,15 @@ import java.util.Map;
 
 public class PlayerInputHandler {
 
+    private static final Map<Player, Boolean> HOLDING_SPACE = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_UP = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_DOWN = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_LEFT = new HashMap<>();
     private static final Map<Player, Boolean> HOLDING_RIGHT = new HashMap<>();
+
+    public static boolean isHoldingSpace(Player player) {
+        return HOLDING_SPACE.containsKey(player) && HOLDING_SPACE.get(player);
+    }
 
     public static boolean isHoldingUp(Player player) {
         return HOLDING_UP.containsKey(player) && HOLDING_UP.get(player);
@@ -30,8 +35,9 @@ public class PlayerInputHandler {
         return HOLDING_RIGHT.containsKey(player) && HOLDING_RIGHT.get(player);
     }
 
-    public static void update(Player player, boolean up, boolean down, boolean left, boolean right) {
+    public static void update(Player player, boolean space, boolean up, boolean down, boolean left, boolean right) {
 
+        HOLDING_SPACE.put(player, space);
         HOLDING_UP.put(player, up);
         HOLDING_DOWN.put(player, down);
         HOLDING_LEFT.put(player, left);
@@ -39,6 +45,7 @@ public class PlayerInputHandler {
     }
 
     public static void clear() {
+        HOLDING_SPACE.clear();
         HOLDING_UP.clear();
         HOLDING_DOWN.clear();
         HOLDING_LEFT.clear();
@@ -46,6 +53,7 @@ public class PlayerInputHandler {
     }
 
     public static void remove(Player player) {
+        HOLDING_SPACE.remove(player);
         HOLDING_UP.remove(player);
         HOLDING_DOWN.remove(player);
         HOLDING_LEFT.remove(player);

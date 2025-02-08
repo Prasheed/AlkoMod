@@ -2,6 +2,7 @@ package com.alko.alkomod.network;
 
 import com.alko.alkomod.Alkomod;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -24,9 +25,19 @@ public class PacketHandler {
                 .decoder(SInputUpdate::new)
                 .consumerMainThread(SInputUpdate::handle)
                 .add();
+
+        INSTANCE.messageBuilder(CAnimationStateUpdate.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(CAnimationStateUpdate::encode)
+                .decoder(CAnimationStateUpdate::new)
+                .consumerMainThread(CAnimationStateUpdate::handle)
+                .add();
     }
 
     public static void sendToServer(Object msg){
         INSTANCE.send(PacketDistributor.SERVER.noArg(),msg);
+    }
+
+    public static void sendToTrackingAndSelf(Object msg, Entity entity) {
+        INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), msg);
     }
 }
