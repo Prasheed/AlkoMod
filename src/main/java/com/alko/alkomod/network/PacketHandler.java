@@ -31,6 +31,12 @@ public class PacketHandler {
                 .decoder(CAnimationStateUpdate::new)
                 .consumerMainThread(CAnimationStateUpdate::handle)
                 .add();
+
+        INSTANCE.messageBuilder(SAnimationStateUpdate.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(SAnimationStateUpdate::encode)
+                .decoder(SAnimationStateUpdate::new)
+                .consumerMainThread(SAnimationStateUpdate::handle)
+                .add();
     }
 
     public static void sendToServer(Object msg){

@@ -86,12 +86,12 @@ public class WingsItem extends ArmorItem implements GeoItem {
                     player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
                     // ТУТ
                     System.out.println(tag.getInt("duration"));
-                    if(!level.isClientSide())PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "flying");
+                    if(level.isClientSide())PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "flying");
                     if (player.tickCount % 20 == 0){
                         tag.putInt("duration", tag.getInt("duration") - 1);
                     }
                 }else{
-                    if(!level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "gliding");
+                    if(level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(),player,"angel_wings", "gliding");
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, -0.2, currentMotion.z);
                     // ТУТ
@@ -99,7 +99,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
 
             }
             // ТУТ
-            if (player.onGround() && !level.isClientSide())
+            if (player.onGround() && level.isClientSide())
                 PlayerAnimationStateHandler.changeValueFromPlayerMap(player.getUUID(), player, "angel_wings", "idle");
             if (tag.getInt("duration") != 0 || tag.getInt("duration") <= 0)
                 if (player.onGround()) {

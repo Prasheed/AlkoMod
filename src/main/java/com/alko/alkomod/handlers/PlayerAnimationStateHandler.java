@@ -2,6 +2,7 @@ package com.alko.alkomod.handlers;
 
 import com.alko.alkomod.network.CAnimationStateUpdate;
 import com.alko.alkomod.network.PacketHandler;
+import com.alko.alkomod.network.SAnimationStateUpdate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Minecart;
@@ -25,13 +26,18 @@ public class PlayerAnimationStateHandler {
         return allPlayerAnimationStates.get(uuid);
     }
 
-    public static void changeValueFromPlayerMap(UUID uuid, @Nullable Player player, String key, String value){
+    public static void changeValueFromPlayerMap(UUID uuid, Player player, String key, String value){
         HashMap<String, String> map = allPlayerAnimationStates.get(uuid);
         if(map == null) map = new HashMap<String, String>();
 
         if(!map.getOrDefault(key, "idle").equals(value)){
-            if(player!=null && !player.level().isClientSide()) {
-                PacketHandler.sendToTrackingAndSelf(new CAnimationStateUpdate(player.getUUID(), key, value), player);
+            if(player!=null) {
+                //PacketHandler.sendToTrackingAndSelf(new CAnimationStateUpdate(player.getUUID(), key, value), player);
+                if(player.level().isClientSide()){
+                    PacketHandler.sendToServer(new SAnimationStateUpdate(player.getUUID(), key, value));
+                }else{
+                    PacketHandler.sendToTrackingAndSelf(new CAnimationStateUpdate(player.getUUID(), key, value), player);
+                }
             }
             allPlayerAnimationStates.getOrDefault(uuid, new HashMap<String, String>()).put(key, value);
         }
