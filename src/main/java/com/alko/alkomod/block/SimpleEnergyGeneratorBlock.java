@@ -51,10 +51,11 @@ public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock imple
         if (hand == InteractionHand.MAIN_HAND){
             if(!level.isClientSide()) {
                 if(be instanceof SimpleEnergyGeneratorBlockEntity blockEntity) {
-                    player.getCapability(PlayerAnimationCapabilityProvider.PLAYER_ANIMATION_STATE).ifPresent(cap -> {
-                        String value = cap.getAnimationStateMap().get("angel_wings");
-                        System.out.println("Прочтено " + value);
-                    });
+//                    player.getCapability(PlayerAnimationCapabilityProvider.PLAYER_ANIMATION_STATE).ifPresent(cap -> {
+//                        String value = cap.getAnimationStateMap().get("angel_wings");
+//                        System.out.println("Прочтено " + value);
+//                    });
+                    player.sendSystemMessage(Component.literal(player.getUUID().toString()));
                 }
             }
         }
