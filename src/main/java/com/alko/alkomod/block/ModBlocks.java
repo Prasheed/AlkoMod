@@ -1,6 +1,7 @@
 package com.alko.alkomod.block;
 
 import com.alko.alkomod.Alkomod;
+import com.alko.alkomod.CreativeTab;
 import com.alko.alkomod.Items.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -28,7 +29,7 @@ public class ModBlocks {
     }
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
-        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        return CreativeTab.addToTab(ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties())));
     }
 
     public static void register(IEventBus eventBus) {

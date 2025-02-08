@@ -38,12 +38,13 @@ public class Alkomod
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        CreativeTab.TABS.register(modEventBus);
 
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerInputHandler());
-        modEventBus.addListener(this::addCreative);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -52,16 +53,7 @@ public class Alkomod
     }
 
     // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-        if(event.getTabKey() == CreativeModeTabs.COMBAT){
-            event.accept(ModItems.URA_DEBUG);
-            event.accept(ModItems.FARE_DUMB);
-            event.accept(ModItems.BASE_WINGS);
-            event.accept(ModItems.GLIDER);
-            event.accept(ModBlocks.GENERATOR_BLOCK);
-        }
-    }
+
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
