@@ -2,6 +2,7 @@ package com.alko.alkomod;
 
 import com.alko.alkomod.Items.ModItems;
 import com.alko.alkomod.block.ModBlocks;
+import com.alko.alkomod.block.blockentity.ModBlockEntities;
 import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -38,6 +39,7 @@ public class Alkomod
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         CreativeTab.TABS.register(modEventBus);
 
 

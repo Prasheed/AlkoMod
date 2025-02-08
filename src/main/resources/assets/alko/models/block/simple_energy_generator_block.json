@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "alko:block/simple_energy_generator_block_front",
+    "side": "alko:block/simple_energy_generator_block_side",
+    "top": "alko:block/simple_energy_generator_block_top",
+    "bottom": "alko:block/simple_energy_generator_block_bottom"
+  }
+}
