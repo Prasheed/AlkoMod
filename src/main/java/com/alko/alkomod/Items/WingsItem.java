@@ -52,6 +52,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
 
         if (entity != null) {
             ItemStack itemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
+
             if (itemStack.hasTag()) {
                 CompoundTag nbt = itemStack.getTag();
 
@@ -60,10 +61,16 @@ public class WingsItem extends ArmorItem implements GeoItem {
                 switch (animation_id){
                     case 0:
                         animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+                        break;
                     case 1:
                         animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
+                        break;
                     case 2:
-                        animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
+                        animationState.getController().setAnimation(RawAnimation.begin().then("gliding", Animation.LoopType.LOOP));
+                        break;
+                    default:
+                        animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+                        break;
                 }
 
             } else {
