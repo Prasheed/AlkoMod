@@ -59,9 +59,6 @@ public class WingsItem extends ArmorItem implements GeoItem {
                 int animation_id = nbt.getInt("animation_id");
 
                 switch (animation_id){
-                    case 0:
-                        animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
-                        break;
                     case 1:
                         animationState.getController().setAnimation(RawAnimation.begin().then("fly", Animation.LoopType.LOOP));
                         break;
@@ -85,6 +82,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
     @SuppressWarnings("deprecation")
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
+        System.out.println("ArmorTick");
         boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
         boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
 
