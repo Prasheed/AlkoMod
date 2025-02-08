@@ -3,6 +3,7 @@ package com.alko.alkomod.block;
 
 import com.alko.alkomod.block.blockentity.ModBlockEntities;
 import com.alko.alkomod.block.blockentity.SimpleEnergyGeneratorBlockEntity;
+import com.alko.alkomod.capability.PlayerAnimationCapabilityProvider;
 import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,15 +51,10 @@ public class SimpleEnergyGeneratorBlock extends HorizontalDirectionalBlock imple
         if (hand == InteractionHand.MAIN_HAND){
             if(!level.isClientSide()) {
                 if(be instanceof SimpleEnergyGeneratorBlockEntity blockEntity) {
-                    int counter = player.isCrouching() ? blockEntity.getCounter() : blockEntity.increaseCounter();
-                    player.sendSystemMessage(Component.literal("Блок был нажат %d раз на сервере".formatted(counter)));
-                    return InteractionResult.sidedSuccess(level.isClientSide());
-                }
-            }else{
-                if(be instanceof SimpleEnergyGeneratorBlockEntity blockEntity) {
-                    int counter = player.isCrouching() ? blockEntity.getCounter() : blockEntity.increaseCounter();
-                    player.sendSystemMessage(Component.literal("Блок был нажат %d раз на клиенте".formatted(counter)));
-                    return InteractionResult.sidedSuccess(level.isClientSide());
+                    player.getCapability(PlayerAnimationCapabilityProvider.PLAYER_ANIMATION_STATE).ifPresent(cap -> {
+                        String value = cap.getAnimationStateMap().get("angel_wings");
+                        System.out.println("Прочтено " + value);
+                    });
                 }
             }
         }

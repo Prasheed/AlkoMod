@@ -82,12 +82,10 @@ public class WingsItem extends ArmorItem implements GeoItem {
     @SuppressWarnings("deprecation")
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
-        System.out.println("ArmorTick");
         boolean isWearing = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()).getItem() == this;
         boolean isJumping = ((LivingEntityAccessorMixin) player).is_jumping();
 
         CompoundTag tag = stack.getOrCreateTag();
-
         if (tag.contains("duration") && tag.contains("animation_id")){
             if (isWearing && isJumping && !player.onGround()){
                 if (tag.getFloat("duration") >= 0.0F) {

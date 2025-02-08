@@ -14,9 +14,9 @@ public class ModItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Alkomod.MOD_ID);
 
-    public static final RegistryObject<Item> URA_DEBUG = CreativeTab.addToTab(ITEMS.register("ura_debug", () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> URA_DEBUG = CreativeTab.addToTab(ITEMS.register("ura_debug", UraDebugItem::new));
 
-    public static final RegistryObject<Item> FARE_DUMB = CreativeTab.addToTab(ITEMS.register("fare_dumb", () -> new FareFoodItem(new Item.Properties())));
+    public static final RegistryObject<Item> FARE_DUMB = CreativeTab.addToTab(ITEMS.register("fare_dumb", FareItem::new));
 
     public static final RegistryObject<Item> BASE_WINGS = CreativeTab.addToTab(ITEMS.register("base_wings", () -> new WingsItem(new Item.Properties())));
 
