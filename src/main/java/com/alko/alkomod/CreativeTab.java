@@ -10,6 +10,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -29,6 +30,7 @@ public class CreativeTab {
                     .displayItems((displayParams, output) ->
                             ALKOMOD_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
                     .withSearchBar()
+                    .withSlotColor(new Color(240, 132, 50, 100).getRGB())
                     .withBackgroundLocation(BACKGROUND)
                     .build()
     );
