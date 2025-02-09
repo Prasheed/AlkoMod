@@ -3,16 +3,12 @@ package com.alko.alkomod.handlers;
 import com.alko.alkomod.network.CAnimationStateUpdate;
 import com.alko.alkomod.network.PacketHandler;
 import com.alko.alkomod.network.SAnimationStateUpdate;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.checkerframework.checker.units.qual.C;
+import org.stringtemplate.v4.ST;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 
@@ -23,6 +19,11 @@ public class PlayerAnimationStateHandler {
 
     @OnlyIn(Dist.CLIENT)
     public static void changeSelfStateAndNotifyServer(Player player, String key, String state){
+        if(allPlayerAnimationStates.get(player.getUUID()) == null){
+            allPlayerAnimationStates.put(player.getUUID(),new HashMap<>());
+            HashMap<String, String> map = init(player);
+            allPlayerAnimationStates.put(player.getUUID(), map);
+        }
         if (allPlayerAnimationStates.get(player.getUUID()).get(key).equals(state)) return;
         allPlayerAnimationStates.get(player.getUUID()).put(key, state);
         PacketHandler.sendToServer(new SAnimationStateUpdate(player.getUUID(), key, state));
@@ -36,7 +37,7 @@ public class PlayerAnimationStateHandler {
 
     }
 
-    public static void init(Player player){
+    public static HashMap<String, String> init(Player player){
         UUID uuid = player.getUUID();
         HashMap<String, String> map = new HashMap<>();
         map.put("angel_wings", "idle");
@@ -44,6 +45,7 @@ public class PlayerAnimationStateHandler {
 
         allPlayerAnimationStates.put(uuid, map);
         System.out.println("Добавлен в список игрок "+player.getDisplayName().getString()+" "+player.getUUID().toString()+"//////////////////////////////////////////////////");
+        return allPlayerAnimationStates.get(uuid);
     }
 
     @OnlyIn(Dist.CLIENT)
