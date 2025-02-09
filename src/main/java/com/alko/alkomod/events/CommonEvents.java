@@ -28,10 +28,8 @@ public class CommonEvents {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(PlayerEvent.PlayerLoggedInEvent event) {
-        System.out.println("Игрок зашёл "+!event.getEntity().level().isClientSide());
         Player player = event.getEntity();
         UUID playerUUID = player.getUUID();
         PlayerAnimationStateHandler.init(player.getUUID());
     }
-
 }
