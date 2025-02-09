@@ -50,6 +50,10 @@ public class PacketHandler {
         INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), msg);
     }
 
+    public static void sendToTracking(Object msg, Entity entity){
+        INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(()->entity), msg);
+    }
+
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event){
         event.enqueueWork(PacketHandler::register);

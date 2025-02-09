@@ -2,6 +2,7 @@ package com.alko.alkomod.network;
 
 import com.alko.alkomod.handlers.PlayerAnimationStateHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.UUID;
@@ -32,7 +33,8 @@ public class SAnimationStateUpdate {
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(()->{
             System.out.println("Пакет обновления анимации на сервере у "+context.get().getSender().getDisplayName().getString()+" "+ this.key + " " + this.value);
-            PlayerAnimationStateHandler.changeValueFromPlayerMap(context.get().getSender(), this.key,this.value,false);
+            Player player = context.get().getSender();
+            if(player!=null) PlayerAnimationStateHandler.updatePlayerAnimationStateAndNotifyNear(player, this.key, this.value);
         });
         context.get().setPacketHandled(true);
     }

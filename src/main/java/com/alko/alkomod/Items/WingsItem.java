@@ -57,7 +57,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
         Player player = (Player) animationState.getData(DataTickets.ENTITY);
 
         UUID uuid = player.getUUID();
-        String state = PlayerAnimationStateHandler.getPlayerAnimationStateFromKey(uuid,"angel_wings");
+        String state = PlayerAnimationStateHandler.getPlayerAnimationState(uuid,"angel_wings");
 
         switch (state){
             case "flying":
@@ -85,12 +85,12 @@ public class WingsItem extends ArmorItem implements GeoItem {
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, 0.3, currentMotion.z);
                     // ТУТ
-                    if(level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player,"angel_wings", "flying",true);
+                    if(level.isClientSide()) PlayerAnimationStateHandler.changeSelfStateAndNotifyServer(player, "angel_wings", "flying");
                     if (player.tickCount % 20 == 0){
                         tag.putInt("duration", tag.getInt("duration") - 1);
                     }
                 }else{
-                    if(level.isClientSide()) PlayerAnimationStateHandler.changeValueFromPlayerMap(player,"angel_wings", "gliding",true);
+                    if(level.isClientSide()) PlayerAnimationStateHandler.changeSelfStateAndNotifyServer(player, "angel_wings", "gliding");
                     Vec3 currentMotion = player.getDeltaMovement();
                     player.setDeltaMovement(currentMotion.x, -0.2, currentMotion.z);
                     // ТУТ
@@ -98,8 +98,8 @@ public class WingsItem extends ArmorItem implements GeoItem {
 
             }
             // ТУТ
-            if (player.onGround() && level.isClientSide())
-                PlayerAnimationStateHandler.changeValueFromPlayerMap(player, "angel_wings", "idle", true);
+            if (player.onGround() && level.isClientSide()) PlayerAnimationStateHandler.changeSelfStateAndNotifyServer(player, "angel_wings", "idle");
+
             if (tag.getInt("duration") != 0 || tag.getInt("duration") <= 0)
                 if (player.onGround()) {
                     tag.putInt("duration", (int) FLY_DURATION);
