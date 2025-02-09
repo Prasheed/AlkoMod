@@ -32,6 +32,7 @@ public class PlayerAnimationStateHandler {
     public static void updatePlayerAnimationStateAndNotifyNear(Player player, String key, String state){
         allPlayerAnimationStates.get(player.getUUID()).put(key, state);
         PacketHandler.sendToTracking(new CAnimationStateUpdate(player.getUUID(), key, state), player);
+        System.out.println("Обновлено на сервере");
     }
 
     public static void init(UUID uuid){
@@ -45,6 +46,7 @@ public class PlayerAnimationStateHandler {
     @OnlyIn(Dist.CLIENT)
     public static void applyOtherPlayerAnimationState(UUID uuid, String key, String state) {
         allPlayerAnimationStates.get(uuid).put(key, state);
+        System.out.println("Обновлено на клиенте");
     }
 
     @OnlyIn(Dist.CLIENT)
