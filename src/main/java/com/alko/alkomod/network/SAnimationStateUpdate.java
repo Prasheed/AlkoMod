@@ -34,7 +34,6 @@ public class SAnimationStateUpdate {
         context.get().enqueueWork(()->{
             Player player = context.get().getSender();
             if(player!=null) PlayerAnimationStateHandler.updatePlayerAnimationStateAndNotifyNear(player, this.key, this.value);
-            System.out.println("Пакет обновления анимации на сервере у "+context.get().getSender().getDisplayName().getString()+" "+ this.key + " " + this.value);
         });
         context.get().setPacketHandled(true);
     }

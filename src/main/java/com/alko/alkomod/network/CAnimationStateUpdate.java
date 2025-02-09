@@ -31,7 +31,7 @@ public class CAnimationStateUpdate {
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(()->{
-            System.out.println("Пакет обновления анимации на клиенте"+ this.key + " " + this.state);
+            System.out.println("Пакет обновления анимации на клиенте "+this.uuid+ " " + this.key + " " + this.state);
             PlayerAnimationStateHandler.applyOtherPlayerAnimationState(this.uuid, this.key, this.state);
         });
         context.get().setPacketHandled(true);
