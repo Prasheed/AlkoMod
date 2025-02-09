@@ -36,12 +36,14 @@ public class PlayerAnimationStateHandler {
 
     }
 
-    public static void init(UUID uuid){
+    public static void init(Player player){
+        UUID uuid = player.getUUID();
         HashMap<String, String> map = new HashMap<>();
         map.put("angel_wings", "idle");
 
 
         allPlayerAnimationStates.put(uuid, map);
+        System.out.println("Добавлен в список игрок "+player.getDisplayName().getString()+" "+player.getUUID().toString()+"//////////////////////////////////////////////////");
     }
 
     @OnlyIn(Dist.CLIENT)

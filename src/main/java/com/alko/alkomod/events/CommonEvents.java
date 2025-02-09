@@ -23,20 +23,15 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = Alkomod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Alkomod.MOD_ID)
 public class CommonEvents {
 
-
-    @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player && !event.getLevel().isClientSide()) {
-            // Получаем UUID игрока
-            UUID playerUUID = player.getUUID();
-            PlayerAnimationStateHandler.init(playerUUID);
-            System.out.println("Добавлен в список игрок "+player.getDisplayName().getString()+" "+player.getUUID().toString());
-        }
+    public static void onEntityJoinWorld(PlayerEvent.PlayerLoggedInEvent event) {
+        System.out.println("Игрок зашёл "+!event.getEntity().level().isClientSide());
+        Player player = event.getEntity();
+        UUID playerUUID = player.getUUID();
+        PlayerAnimationStateHandler.init(player);
     }
-
 
 }
