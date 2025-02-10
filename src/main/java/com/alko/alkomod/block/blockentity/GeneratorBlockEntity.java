@@ -51,6 +51,7 @@ public class GeneratorBlockEntity extends BlockEntity implements TickableBlockEn
 
     public boolean changeWorkState(){
         workState = !workState;
+        setChanged();
         return workState;
     }
 
