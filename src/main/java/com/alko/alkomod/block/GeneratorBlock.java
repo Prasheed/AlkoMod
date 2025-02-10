@@ -5,6 +5,7 @@ import com.alko.alkomod.block.blockentity.GeneratorBlockEntity;
 import com.alko.alkomod.block.blockentity.ModBlockEntities;
 import com.alko.alkomod.block.blockentity.SimpleEnergyGeneratorBlockEntity;
 import com.alko.alkomod.handlers.PlayerAnimationStateHandler;
+import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,7 +30,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class GeneratorBlock extends HorizontalDirectionalBlock implements EntityBlock{
+public class GeneratorBlock extends HorizontalDirectionalBlock implements EntityBlock {
     //public static final IntegerProperty ROTATION = BlockStateProperties.
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -98,4 +101,10 @@ public class GeneratorBlock extends HorizontalDirectionalBlock implements Entity
 
         return super.use(state, level, pos, player, hand, hitResult);
     }
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return TickableBlockEntity.getTickerHelper(pLevel);
+    }
+
 }
