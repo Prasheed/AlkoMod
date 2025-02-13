@@ -1,6 +1,6 @@
 package com.alko.alkomod.block;
 
-import com.alko.alkomod.util.TickableBlockEntity;
+import com.alko.alkomod.block.blockentity.GeneratorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -12,8 +12,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -23,12 +21,13 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class GeneratorBlock extends HorizontalDirectionalBlock {
+public class GeneratorBlock extends HorizontalDirectionalBlock implements EntityBlock {
     //public static final IntegerProperty ROTATION = BlockStateProperties.
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
+
     public GeneratorBlock() {
-        super(Properties.copy(Blocks.GOLD_BLOCK).noOcclusion());
+        super(Properties.copy(Blocks.STONE).noOcclusion());
     }
 
     private static final VoxelShape SHAPE_A = Block.box(0, 0, 2, 16, 13, 14);
@@ -70,5 +69,23 @@ public class GeneratorBlock extends HorizontalDirectionalBlock {
         builder.add(FACING);
     }
 
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new GeneratorBlockEntity(blockPos, blockState);
+    }
 
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if(pHand == InteractionHand.MAIN_HAND){
+            if(!pLevel.isClientSide()){
+                BlockEntity be = pLevel.getBlockEntity(pPos);
+                if(be instanceof GeneratorBlockEntity blockEntity){
+                    blockEntity.changeWorkState();
+                    pPlayer.sendSystemMessage(Component.literal("Состояние изменено "+blockEntity.isWorkState()));
+                }
+            }
+        }
+
+        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+    }
 }

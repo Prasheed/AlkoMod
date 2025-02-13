@@ -2,6 +2,8 @@ package com.alko.alkomod.Items;
 
 import com.alko.alkomod.Alkomod;
 import com.alko.alkomod.CreativeTab;
+import com.alko.alkomod.Items.custom.GeneratorBlockItem;
+import com.alko.alkomod.block.ModBlocks;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,6 +23,8 @@ public class ModItems {
     public static final RegistryObject<Item> BASE_WINGS = CreativeTab.addToTab(ITEMS.register("base_wings", () -> new WingsItem(new Item.Properties())));
 
     public static final RegistryObject<Item> GLIDER = CreativeTab.addToTab(ITEMS.register("glider", () -> new GliderItem(new Item.Properties())));
+
+    public static final RegistryObject<Item> GENERATOR_BLOCK_ITEM = CreativeTab.addToTab(ITEMS.register("generator_block", () -> new GeneratorBlockItem(ModBlocks.GENERATOR_BLOCK.get(),new Item.Properties())));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
