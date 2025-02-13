@@ -4,7 +4,9 @@ import com.alko.alkomod.Alkomod;
 import com.alko.alkomod.CreativeTab;
 import com.alko.alkomod.Items.custom.GeneratorBlockItem;
 import com.alko.alkomod.block.ModBlocks;
+import com.alko.alkomod.entity.ModEntities;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,6 +27,8 @@ public class ModItems {
     public static final RegistryObject<Item> GLIDER = CreativeTab.addToTab(ITEMS.register("glider", () -> new GliderItem(new Item.Properties())));
 
     public static final RegistryObject<Item> GENERATOR_BLOCK_ITEM = CreativeTab.addToTab(ITEMS.register("generator_block", () -> new GeneratorBlockItem(ModBlocks.GENERATOR_BLOCK.get(),new Item.Properties())));
+
+    public static final RegistryObject<Item> POTBELLY_SPAWN_EGG = CreativeTab.addToTab(ITEMS.register("potbelly_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.POTBELLY, 0xD57E36, 0x1D0D00, new Item.Properties())));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);

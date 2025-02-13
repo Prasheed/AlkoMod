@@ -4,10 +4,13 @@ import com.alko.alkomod.Items.ModItems;
 import com.alko.alkomod.block.ModBlocks;
 import com.alko.alkomod.block.blockentity.ModBlockEntity;
 import com.alko.alkomod.block.blockentity.client.GeneratorBlockRenderer;
+import com.alko.alkomod.entity.ModEntities;
+import com.alko.alkomod.entity.client.PotbellyRenderer;
 import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -37,6 +40,7 @@ public class Alkomod
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModEntities.register(modEventBus);
 
         ModBlockEntity.BLOCK_ENTITIES.register(modEventBus);
         CreativeTab.TABS.register(modEventBus);
@@ -76,6 +80,7 @@ public class Alkomod
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
             BlockEntityRenderers.register(ModBlockEntity.GENERATOR_BLOCK_ENTITY.get(), GeneratorBlockRenderer::new);
+            EntityRenderers.register(ModEntities.POTBELLY.get(), PotbellyRenderer::new);
         }
     }
 }

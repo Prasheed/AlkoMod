@@ -6,5 +6,6 @@
   "item.alko.glider" : "Глайдер",
   "itemGroup.alkomod.tab" : "Алко Мод",
   "item.alko.glider" : "Глайдер",
-  "block.alko.simple_energy_generator_block" : "Простой генератор энергии"
+  "block.alko.simple_energy_generator_block" : "Простой генератор энергии",
+  "item.alko.potbelly_spawn_egg" : "яйцо толстяка"
 }

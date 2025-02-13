@@ -4,6 +4,8 @@ package com.alko.alkomod.events;
 import com.alko.alkomod.Alkomod;
 import com.alko.alkomod.capability.PlayerAnimationCapability;
 import com.alko.alkomod.capability.PlayerAnimationCapabilityProvider;
+import com.alko.alkomod.entity.ModEntities;
+import com.alko.alkomod.entity.custom.PotbellyEntity;
 import com.alko.alkomod.handlers.PlayerAnimationStateHandler;
 import com.alko.alkomod.network.PacketHandler;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,3 +36,5 @@ public class CommonEvents {
         PlayerAnimationStateHandler.init(player.getUUID());
     }
 }
+
+
