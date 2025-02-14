@@ -2,9 +2,14 @@ package com.alko.alkomod;
 
 import com.alko.alkomod.Items.ModItems;
 import com.alko.alkomod.block.ModBlocks;
+import com.alko.alkomod.block.blockentity.ModBlockEntity;
 import com.alko.alkomod.handlers.PlayerInputHandler;
+import com.alko.alkomod.screen.BEGeneratorBlockScreen;
+import com.alko.alkomod.screen.ModMenuTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -37,8 +42,8 @@ public class Alkomod
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         CreativeTab.TABS.register(modEventBus);
-
-
+        ModBlockEntity.BLOCK_ENTITIES.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerInputHandler());
@@ -70,6 +75,7 @@ public class Alkomod
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            MenuScreens.register(ModMenuTypes.BE_GENERATOR_BLOCK_MENU.get(), BEGeneratorBlockScreen::new);
         }
     }
 }

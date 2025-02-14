@@ -6,5 +6,6 @@
   "item.alko.glider" : "Глайдер",
   "itemGroup.alkomod.tab" : "Алко Мод",
   "item.alko.glider" : "Глайдер",
-  "block.alko.simple_energy_generator_block" : "Простой генератор энергии"
+  "block.alko.be_generator_block" : "Генератор BE энергии",
+  "item.alko.battery_item" : "Батарея"
 }
