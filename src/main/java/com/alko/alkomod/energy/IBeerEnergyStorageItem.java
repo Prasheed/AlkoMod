@@ -19,4 +19,8 @@ public interface IBeerEnergyStorageItem {
 
     // Может ли объект отдавать энергию?
     boolean canExtract();
+
+    int getMaxExtract();
+
+    int getMaxReceive();
 }

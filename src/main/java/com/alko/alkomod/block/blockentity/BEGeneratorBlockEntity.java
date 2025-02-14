@@ -2,7 +2,9 @@ package com.alko.alkomod.block.blockentity;
 
 import com.alko.alkomod.Alkomod;
 import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
+import com.alko.alkomod.energy.IBeerEnergyStorageItem;
 import com.alko.alkomod.screen.BEGeneratorBlockMenu;
+import com.alko.alkomod.util.EnergyUtils;
 import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -130,6 +132,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
         CompoundTag data = pTag.getCompound(Alkomod.MOD_ID);
         this.energyStored = data.getInt("energyStored");
         this.litTime = data.getInt("litTime");
+        this.litDuration = data.getInt("litDuration");
         itemHandler.deserializeNBT(data.getCompound("inventory"));
     }
 
@@ -140,6 +143,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
         data.putInt("energyStored", this.energyStored);
         data.put("inventory", itemHandler.serializeNBT());
         data.putInt("litTime", this.litTime);
+        data.putInt("litDuration", this.litDuration);
         pTag.put(Alkomod.MOD_ID, data);
         super.saveAdditional(pTag);
     }
@@ -191,6 +195,16 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
         return maxExtract > 0;
     }
 
+    @Override
+    public int getMaxExtract() {
+        return this.maxExtract;
+    }
+
+    @Override
+    public int getMaxReceive() {
+        return this.maxReceive;
+    }
+
     public void test(Player player){
         player.sendSystemMessage(Component.literal("блок энтити работает"));
 
@@ -211,8 +225,28 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
         if(hasFuel() && !this.isLit() && getStoredEnergy() != getMaxEnergy()){
             decreaseFuelAndLit();
         }
+        chargeItemIfCan();
+        dischargeItemIfCan();
 
         ticks++;
+    }
+
+    private void dischargeItemIfCan() {
+        ItemStack stack = itemHandler.getStackInSlot(2);
+        if(stack.getItem() instanceof IBeerEnergyStorageItem storageItem){
+            if(this.getStoredEnergy()<this.getMaxEnergy() && storageItem.getStoredEnergy(stack)>0){
+                EnergyUtils.transferMaxPossibleEnergy(storageItem,stack,this);
+            }
+        }
+    }
+
+    private void chargeItemIfCan() {
+        ItemStack stack = itemHandler.getStackInSlot(1);
+        if(stack.getItem() instanceof IBeerEnergyStorageItem storageItem){
+            if(this.getStoredEnergy() > 0 && storageItem.getStoredEnergy(stack) < storageItem.getMaxEnergy(stack)){
+                EnergyUtils.transferMaxPossibleEnergy(this, storageItem, stack);
+            }
+        }
     }
 
     private void decreaseFuelAndLit() {

@@ -49,4 +49,28 @@ public class EnergyUtils {
 
         return amount - received;
     }
+
+    public static int transferMaxPossibleEnergy(IBeerEnergyStorageItem source, ItemStack sourceStack,
+                                     IBeerEnergyStorageBlock target) {
+        int transferAmount = Math.min(source.getMaxExtract(), target.getMaxReceive());
+        int extracted = source.extractEnergy(sourceStack, transferAmount, true);
+        int received = target.receiveEnergy(extracted, true);
+
+        extracted = source.extractEnergy(sourceStack, received, false);
+        received = target.receiveEnergy(extracted, false);
+
+        return received;
+    }
+
+    public static int transferMaxPossibleEnergy(IBeerEnergyStorageBlock source,
+                                     IBeerEnergyStorageItem target, ItemStack targetStack) {
+        int transferAmount = Math.min(source.getMaxExtract(), target.getMaxReceive());
+        int extracted = source.extractEnergy(transferAmount, true);
+        int received = target.receiveEnergy(targetStack, extracted, true);
+
+        extracted = source.extractEnergy(received, false);
+        received = target.receiveEnergy(targetStack, extracted, false);
+
+        return received;
+    }
 }

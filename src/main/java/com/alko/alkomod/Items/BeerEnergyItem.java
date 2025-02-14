@@ -66,4 +66,14 @@ public abstract class BeerEnergyItem extends Item implements IBeerEnergyStorageI
     public boolean canExtract() {
         return maxExtract > 0;
     }
+
+    @Override
+    public int getMaxExtract() {
+        return this.maxExtract;
+    }
+
+    @Override
+    public int getMaxReceive() {
+        return this.maxReceive;
+    }
 }

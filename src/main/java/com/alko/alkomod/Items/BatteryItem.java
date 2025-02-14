@@ -14,7 +14,7 @@ import java.util.List;
 
 public class BatteryItem extends BeerEnergyItem {
     public BatteryItem() {
-        super(new Item.Properties().stacksTo(1), 10000, 500, 500);
+        super(new Item.Properties().stacksTo(1), 2500, 500, 500);
     }
 
     @Override
@@ -27,10 +27,11 @@ public class BatteryItem extends BeerEnergyItem {
         if(pUsedHand == InteractionHand.MAIN_HAND){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
             if(stack.getItem() instanceof BatteryItem item){
-                if(!level.isClientSide() && player.isCrouching()) {
-                    player.sendSystemMessage(Component.literal(String.valueOf(getStoredEnergy(stack))));
+                if(!level.isClientSide()){
+                    System.out.println(item.getStoredEnergy(stack)+" на сервере");
+                }else{
+                    System.out.println(item.getStoredEnergy(stack)+" на клиенте");
                 }
-                item.receiveEnergy(stack, 50,false);
             }
         }
         return super.use(level, player, pUsedHand);
