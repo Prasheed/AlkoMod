@@ -2,6 +2,7 @@ package com.alko.alkomod.events;
 
 
 import com.alko.alkomod.Alkomod;
+import com.alko.alkomod.Keybindings;
 import com.alko.alkomod.handlers.PlayerAnimationStateHandler;
 import com.alko.alkomod.handlers.PlayerInputHandler;
 import com.alko.alkomod.network.PacketHandler;
@@ -11,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -47,11 +49,15 @@ public class ClientEvents {
 //        //PacketHandler.sendToServer(new SInputUpdate(input.up, input.down, input.left, input.right));
 //    }
 
-
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent evt) {
         if (evt.phase == TickEvent.Phase.END) {
             updateInputAndSend();
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        if (Keybindings.INSTANCE.OpenBagKey.isDown() && minecraft.player != null){
+            Keybindings.INSTANCE.OpenBagKey.consumeClick();
+            minecraft.player.displayClientMessage(Component.literal("соси хуй уродец блять"), true);
         }
     }
 

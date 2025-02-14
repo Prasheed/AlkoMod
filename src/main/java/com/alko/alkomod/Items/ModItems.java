@@ -30,6 +30,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> POTBELLY_SPAWN_EGG = CreativeTab.addToTab(ITEMS.register("potbelly_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.POTBELLY, 0xD57E36, 0x1D0D00, new Item.Properties())));
 
+    public static final RegistryObject<Item> YANDEX_BAG = CreativeTab.addToTab(ITEMS.register("yandex_bag", () -> new YandexBagItem(new Item.Properties())));
+
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }

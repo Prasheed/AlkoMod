@@ -11,7 +11,10 @@ import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
     ANGEL_WINGS("angel_wings", 26, new int[]{ 0, 0, 0, 0 }, 25,
-            SoundEvents.ARMOR_EQUIP_ELYTRA, 1f, 0f, () -> Ingredient.of(Items.FEATHER));
+            SoundEvents.ARMOR_EQUIP_ELYTRA, 1f, 0f, () -> Ingredient.of(Items.FEATHER)),
+
+    YANDEX_BAG("yandex_bag", 26, new int[]{ 1, 2, 3, 4 }, 25,
+            SoundEvents.ARMOR_EQUIP_ELYTRA, 1f, 0f, () -> Ingredient.of(Items.LEATHER));
 
     private final String name;
     private final int durabilityMultiplier;
