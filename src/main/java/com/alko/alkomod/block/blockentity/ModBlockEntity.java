@@ -19,4 +19,6 @@ public class ModBlockEntity {
                             ModBlocks.GENERATOR_BLOCK.get()).build(null));
 
 }
+    public static final RegistryObject<BlockEntityType<BEGeneratorBlockEntity>> GENERATOR_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("be_generator_block_entity", () -> BlockEntityType.Builder.of(BEGeneratorBlockEntity::new, ModBlocks.BE_GENERATOR_BLOCK.get()).build(null));
 

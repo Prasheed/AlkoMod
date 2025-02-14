@@ -25,6 +25,7 @@ public class ModItems {
     public static final RegistryObject<Item> BASE_WINGS = CreativeTab.addToTab(ITEMS.register("base_wings", () -> new WingsItem(new Item.Properties())));
 
     public static final RegistryObject<Item> GLIDER = CreativeTab.addToTab(ITEMS.register("glider", () -> new GliderItem(new Item.Properties())));
+    public static final RegistryObject<Item> BATTERY_ITEM = CreativeTab.addToTab(ITEMS.register("battery_item", BatteryItem::new));
 
     public static final RegistryObject<Item> GENERATOR_BLOCK_ITEM = CreativeTab.addToTab(ITEMS.register("generator_block", () -> new GeneratorBlockItem(ModBlocks.GENERATOR_BLOCK.get(),new Item.Properties())));
 

@@ -20,7 +20,8 @@ public class ModBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, Alkomod.MOD_ID);
 
     public static final RegistryObject<Block> GENERATOR_BLOCK = BLOCKS.register("generator_block", GeneratorBlock::new);
-
+    public static final RegistryObject<Block> BE_GENERATOR_BLOCK = registerBlock("be_generator_block",
+            BEGeneratorBlock::new);
     //public static final RegistryObject<Block> SIMPLE_ENERGY_GENERATOR_BLOCK = registerBlock("simple_energy_generator_block",
     //        SimpleEnergyGeneratorBlock::new);
 
