@@ -21,10 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
@@ -37,8 +35,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergyStorageBlock, TickableBlockEntity, MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(3);
-    private LazyOptional<IItemHandler> lazyItemHadler = LazyOptional.empty();
+    private final ItemStackHandler itemHandler = new ItemStackHandler(3){
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            switch (slot){
+                case 0 -> {
+                    return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+                }
+                case 1, 2 -> {
+                    return stack.getItem() instanceof IBeerEnergyStorageItem;
+                }
+            }
+            return false;
+        }
+    };
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     protected final ContainerData data;
     private int energyStored;
     private int capacity = 10000;
@@ -50,7 +61,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
 
 
     public BEGeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntity.GENERATOR_BLOCK_ENTITY.get(), pos, state);
+        super(ModBlockEntity.BE_GENERATOR_BLOCK_ENTITY.get(), pos, state);
         this.data = new ContainerData() {
             @Override
             public int get(int i) {
@@ -101,7 +112,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == ForgeCapabilities.ITEM_HANDLER){
-            return lazyItemHadler.cast();
+            return lazyItemHandler.cast();
         }
 
         return super.getCapability(cap, side);
@@ -110,13 +121,13 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
     @Override
     public void onLoad() {
         super.onLoad();
-        lazyItemHadler = LazyOptional.of(()-> itemHandler);
+        lazyItemHandler = LazyOptional.of(()-> itemHandler);
     }
 
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        lazyItemHadler.invalidate();
+        lazyItemHandler.invalidate();
     }
 
     @Override

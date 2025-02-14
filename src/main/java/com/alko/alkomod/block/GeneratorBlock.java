@@ -81,7 +81,6 @@ public class GeneratorBlock extends HorizontalDirectionalBlock implements Entity
                 BlockEntity be = pLevel.getBlockEntity(pPos);
                 if(be instanceof GeneratorBlockEntity blockEntity){
                     blockEntity.changeWorkState();
-                    pPlayer.sendSystemMessage(Component.literal("Состояние изменено "+blockEntity.isWorkState()));
                 }
             }
         }

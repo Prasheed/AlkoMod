@@ -56,7 +56,7 @@ public class BEGeneratorBlock extends HorizontalDirectionalBlock implements Enti
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return ModBlockEntity.GENERATOR_BLOCK_ENTITY.get().create(blockPos, blockState);
+        return ModBlockEntity.BE_GENERATOR_BLOCK_ENTITY.get().create(blockPos, blockState);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class Alkomod
         ModBlockEntity.BLOCK_ENTITIES.register(modEventBus);
         CreativeTab.TABS.register(modEventBus);
         GeckoLib.initialize();
-
+        ModMenuTypes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerInputHandler());

@@ -15,7 +15,7 @@ public class ModMenuTypes {
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, Alkomod.MOD_ID);
 
     public static final RegistryObject<MenuType<BEGeneratorBlockMenu>> BE_GENERATOR_BLOCK_MENU =
-            registerMenuType("gem_polishing_menu", BEGeneratorBlockMenu::new);
+            registerMenuType("be_generator_block_menu", BEGeneratorBlockMenu::new);
 
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
