@@ -23,6 +23,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> GENERATOR_BLOCK = BLOCKS.register("generator_block", GeneratorBlock::new);
 
     public static final RegistryObject<Block> BASIC_CABLE_BLOCK = registerBlock("cable_block", CableBlock::new);
+    public static final RegistryObject<Block> BE_GENERATOR_BLOCK = registerBlock("be_generator_block",
+            BEGeneratorBlock::new);
+    //public static final RegistryObject<Block> SIMPLE_ENERGY_GENERATOR_BLOCK = registerBlock("simple_energy_generator_block",
+    //        SimpleEnergyGeneratorBlock::new);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
