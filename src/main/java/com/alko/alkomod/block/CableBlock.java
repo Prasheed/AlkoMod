@@ -1,5 +1,6 @@
 package com.alko.alkomod.block;
 
+import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -76,7 +77,7 @@ public class CableBlock extends Block {
     }
 
     private boolean canConnect(Level level, BlockPos pos) {
-        return level.getBlockState(pos).getBlock() instanceof CableBlock;
+        return level.getBlockState(pos).getBlock() instanceof CableBlock || level.getBlockEntity(pos) instanceof IBeerEnergyStorageBlock;
     }
 
     @Override

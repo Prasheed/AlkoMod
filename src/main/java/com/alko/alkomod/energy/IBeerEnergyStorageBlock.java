@@ -1,24 +1,18 @@
 package com.alko.alkomod.energy;
 
 public interface IBeerEnergyStorageBlock {
-    int receiveEnergy(int amount, boolean simulate);
-
-    // Извлекает энергию
-    int extractEnergy(int amount, boolean simulate);
-
-    // Получает текущий заряд энергии
+    // Методы для получения значений
+    int getCapacity();
+    int getMaxExtract();
+    int getMaxReceive();
     int getStoredEnergy();
 
-    // Получает максимальную ёмкость для хранения энергии
-    int getMaxEnergy();
+    // Методы для управления энергией
+    int receiveEnergy(int amount, boolean simulate);
+    int extractEnergy(int amount, boolean simulate);
 
-    // Может ли объект принимать энергию?
+    // Методы для проверки возможностей
     boolean canReceive();
-
-    // Может ли объект отдавать энергию?
     boolean canExtract();
-
-    int getMaxExtract();
-
-    int getMaxReceive();
+    boolean isFull();
 }

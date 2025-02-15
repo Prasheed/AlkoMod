@@ -10,9 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -22,7 +19,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
@@ -34,7 +30,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergyStorageBlock, TickableBlockEntity, MenuProvider {
+public class BEGeneratorBlockEntity extends BEBlockEntity implements TickableBlockEntity, MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(3){
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
@@ -51,10 +47,6 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
     };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     protected final ContainerData data;
-    private int energyStored;
-    private int capacity = 10000;
-    private final int maxReceive = 5;
-    private int maxExtract = 5;
     private int ticks = 0;
     private int litTime;
     private int litDuration;
@@ -62,6 +54,10 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
 
     public BEGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntity.BE_GENERATOR_BLOCK_ENTITY.get(), pos, state);
+        this.capacity = 10000;
+        this.maxExtract = 10;
+        this.maxReceive = 10;
+        this.storedEnergy = 0;
         this.data = new ContainerData() {
             @Override
             public int get(int i) {
@@ -73,7 +69,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
                         return BEGeneratorBlockEntity.this.litDuration;
                     }
                     case 2 ->{
-                        return BEGeneratorBlockEntity.this.energyStored;
+                        return BEGeneratorBlockEntity.this.storedEnergy;
                     }
                     case 3 ->{
                         return BEGeneratorBlockEntity.this.capacity;
@@ -89,7 +85,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
                     switch (i) {
                         case 0 -> BEGeneratorBlockEntity.this.litTime = i1;
                         case 1 -> BEGeneratorBlockEntity.this.litDuration = i1;
-                        case 2 -> BEGeneratorBlockEntity.this.energyStored = i1;
+                        case 2 -> BEGeneratorBlockEntity.this.storedEnergy = i1;
                         case 3 -> BEGeneratorBlockEntity.this.capacity = i1;
                     }
             }
@@ -114,7 +110,6 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
         if(cap == ForgeCapabilities.ITEM_HANDLER){
             return lazyItemHandler.cast();
         }
-
         return super.getCapability(cap, side);
     }
 
@@ -131,7 +126,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag() {
         CompoundTag tag =  super.getUpdateTag();
         saveAdditional(tag);
         return tag;
@@ -141,79 +136,19 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
     public void load(CompoundTag pTag) {
         super.load(pTag);
         CompoundTag data = pTag.getCompound(Alkomod.MOD_ID);
-        this.energyStored = data.getInt("energyStored");
         this.litTime = data.getInt("litTime");
         this.litDuration = data.getInt("litDuration");
         itemHandler.deserializeNBT(data.getCompound("inventory"));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-
+    public void saveAdditional(CompoundTag pTag) {
         var data = new CompoundTag();
-        data.putInt("energyStored", this.energyStored);
         data.put("inventory", itemHandler.serializeNBT());
         data.putInt("litTime", this.litTime);
         data.putInt("litDuration", this.litDuration);
         pTag.put(Alkomod.MOD_ID, data);
         super.saveAdditional(pTag);
-    }
-
-    @Override
-    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public int receiveEnergy(int amount, boolean simulate) {
-        int accepted = Math.min(capacity - energyStored, Math.min(amount, maxReceive));
-        if (!simulate) {
-            energyStored += accepted;
-            setChanged();
-            this.level.sendBlockUpdated(this.worldPosition,getBlockState(),getBlockState(), Block.UPDATE_ALL);
-        }
-        return accepted;
-    }
-
-    @Override
-    public int extractEnergy(int amount, boolean simulate) {
-        int extracted = Math.min(energyStored, Math.min(amount, maxExtract));
-        if (!simulate) {
-            energyStored -= extracted;
-            setChanged();
-            this.level.sendBlockUpdated(this.worldPosition,getBlockState(),getBlockState(), Block.UPDATE_ALL);
-        }
-        return extracted;
-    }
-
-    @Override
-    public int getStoredEnergy() {
-        return energyStored;
-    }
-
-    @Override
-    public int getMaxEnergy() {
-        return capacity;
-    }
-
-    @Override
-    public boolean canReceive() {
-        return maxReceive > 0;
-    }
-
-    @Override
-    public boolean canExtract() {
-        return maxExtract > 0;
-    }
-
-    @Override
-    public int getMaxExtract() {
-        return this.maxExtract;
-    }
-
-    @Override
-    public int getMaxReceive() {
-        return this.maxReceive;
     }
 
     public void test(Player player){
@@ -233,7 +168,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
             setChanged();
             receiveEnergy(5,false);
         }
-        if(hasFuel() && !this.isLit() && getStoredEnergy() != getMaxEnergy()){
+        if(hasFuel() && !this.isLit() && getStoredEnergy() != getCapacity()){
             decreaseFuelAndLit();
         }
         chargeItemIfCan();
@@ -245,7 +180,7 @@ public class BEGeneratorBlockEntity extends BlockEntity implements IBeerEnergySt
     private void dischargeItemIfCan() {
         ItemStack stack = itemHandler.getStackInSlot(2);
         if(stack.getItem() instanceof IBeerEnergyStorageItem storageItem){
-            if(this.getStoredEnergy()<this.getMaxEnergy() && storageItem.getStoredEnergy(stack)>0){
+            if(this.getStoredEnergy()<this.getCapacity() && storageItem.getStoredEnergy(stack)>0){
                 EnergyUtils.transferMaxPossibleEnergy(storageItem,stack,this);
             }
         }
