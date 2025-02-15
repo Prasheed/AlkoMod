@@ -7,6 +7,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,8 +22,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> GENERATOR_BLOCK = BLOCKS.register("generator_block", GeneratorBlock::new);
 
-    //public static final RegistryObject<Block> SIMPLE_ENERGY_GENERATOR_BLOCK = registerBlock("simple_energy_generator_block",
-    //        SimpleEnergyGeneratorBlock::new);
+    public static final RegistryObject<Block> BASIC_CABLE_BLOCK = registerBlock("cable_block", CableBlock::new);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
