@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "alko:block/be_battery_block"
+    }
+  }
+}

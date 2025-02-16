@@ -17,10 +17,14 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<BEGeneratorBlockMenu>> BE_GENERATOR_BLOCK_MENU =
             registerMenuType("be_generator_block_menu", BEGeneratorBlockMenu::new);
 
+    public static final RegistryObject<MenuType<BEBatteryMenu>> BE_BATTERY_MENU =
+            registerMenuType("be_battery_menu", BEBatteryMenu::new);
+
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }
+
 
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);

@@ -8,6 +8,7 @@ import com.alko.alkomod.entity.ModEntities;
 import com.alko.alkomod.entity.client.PotbellyRenderer;
 import com.alko.alkomod.block.blockentity.ModBlockEntity;
 import com.alko.alkomod.handlers.PlayerInputHandler;
+import com.alko.alkomod.screen.BEBatteryScreen;
 import com.alko.alkomod.screen.BEGeneratorBlockScreen;
 import com.alko.alkomod.screen.ModMenuTypes;
 import com.mojang.logging.LogUtils;
@@ -84,6 +85,7 @@ public class Alkomod
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
             MenuScreens.register(ModMenuTypes.BE_GENERATOR_BLOCK_MENU.get(), BEGeneratorBlockScreen::new);
+            MenuScreens.register(ModMenuTypes.BE_BATTERY_MENU.get(), BEBatteryScreen::new);
             BlockEntityRenderers.register(ModBlockEntity.GENERATOR_BLOCK_ENTITY.get(), GeneratorBlockRenderer::new);
             EntityRenderers.register(ModEntities.POTBELLY.get(), PotbellyRenderer::new);
         }

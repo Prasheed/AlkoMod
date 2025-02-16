@@ -25,6 +25,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> BASIC_CABLE_BLOCK = registerBlock("cable_block", CableBlock::new);
     public static final RegistryObject<Block> BE_GENERATOR_BLOCK = registerBlock("be_generator_block",
             BEGeneratorBlock::new);
+
+    public static final RegistryObject<Block> BE_BATTERY_BLOCK = registerBlock("be_battery_block",
+            BEBattery::new);
     //public static final RegistryObject<Block> SIMPLE_ENERGY_GENERATOR_BLOCK = registerBlock("simple_energy_generator_block",
     //        SimpleEnergyGeneratorBlock::new);
 

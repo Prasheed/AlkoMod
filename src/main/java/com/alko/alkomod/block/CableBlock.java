@@ -77,7 +77,7 @@ public class CableBlock extends Block {
     }
 
     private boolean canConnect(Level level, BlockPos pos) {
-        return level.getBlockState(pos).getBlock() instanceof CableBlock || level.getBlockEntity(pos) instanceof IBeerEnergyStorageBlock;
+        return level.getBlockState(pos).getBlock() instanceof CableBlock || level.getBlockEntity(pos) instanceof IBeerEnergyStorageBlock    ;
     }
 
     @Override
