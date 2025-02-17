@@ -34,6 +34,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> HU_TAO = CreativeTab.addToTab(ITEMS.register("hu_tao", () -> new HuTao(new Item.Properties())));
 
+    public static final RegistryObject<Item> WRENCH = CreativeTab.addToTab(ITEMS.register("wrench", () -> new WrenchItem(new Item.Properties())));
+
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }
