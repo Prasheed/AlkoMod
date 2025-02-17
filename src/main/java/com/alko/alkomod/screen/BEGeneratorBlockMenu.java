@@ -60,7 +60,6 @@ public class BEGeneratorBlockMenu extends AbstractContainerMenu {
             });
 
         });
-
         addDataSlots(data);
     }
 

@@ -1,11 +1,12 @@
 package com.alko.alkomod.block;
 
+import com.alko.alkomod.Items.WrenchItem;
 import com.alko.alkomod.block.blockentity.BEGeneratorBlockEntity;
+import com.alko.alkomod.block.blockentity.EnergySide;
 import com.alko.alkomod.block.blockentity.ModBlockEntity;
-import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
 import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -75,7 +75,13 @@ public class BEGeneratorBlock extends HorizontalDirectionalBlock implements Enti
         if(!pLevel.isClientSide()){
             BlockEntity be = pLevel.getBlockEntity(pPos);
             if(be instanceof BEGeneratorBlockEntity blockEntity){
-                NetworkHooks.openScreen((ServerPlayer) pPlayer, blockEntity,pPos);
+                if(pPlayer.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof WrenchItem){
+                    Direction dir = pHit.getDirection();
+                    EnergySide curr = blockEntity.getSideMode(dir);
+                    blockEntity.setSideMode(dir,curr.next());
+                }else{
+                    NetworkHooks.openScreen((ServerPlayer) pPlayer, blockEntity,pPos);
+                }
             }else {
                 throw new IllegalStateException("хуйня");
             }

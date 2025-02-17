@@ -4,6 +4,7 @@ import com.alko.alkomod.Items.ModItems;
 import com.alko.alkomod.block.ModBlocks;
 import com.alko.alkomod.block.blockentity.ModBlockEntity;
 import com.alko.alkomod.block.blockentity.client.GeneratorBlockRenderer;
+import com.alko.alkomod.block.blockentity.client.UniversalBEBlockEntityRenderer;
 import com.alko.alkomod.entity.ModEntities;
 import com.alko.alkomod.entity.client.PotbellyRenderer;
 import com.alko.alkomod.block.blockentity.ModBlockEntity;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -88,6 +90,12 @@ public class Alkomod
             MenuScreens.register(ModMenuTypes.BE_BATTERY_MENU.get(), BEBatteryScreen::new);
             BlockEntityRenderers.register(ModBlockEntity.GENERATOR_BLOCK_ENTITY.get(), GeneratorBlockRenderer::new);
             EntityRenderers.register(ModEntities.POTBELLY.get(), PotbellyRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(ModBlockEntity.BE_GENERATOR_BLOCK_ENTITY.get(), UniversalBEBlockEntityRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntity.BE_BATTERY_BLOCK_ENTITY.get(), UniversalBEBlockEntityRenderer::new);
         }
     }
 }

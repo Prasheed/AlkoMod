@@ -1,7 +1,6 @@
 package com.alko.alkomod.block.blockentity;
 
 import com.alko.alkomod.Alkomod;
-import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
 import com.alko.alkomod.energy.IBeerEnergyStorageItem;
 import com.alko.alkomod.screen.BEGeneratorBlockMenu;
 import com.alko.alkomod.util.EnergyUtils;
@@ -19,7 +18,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;

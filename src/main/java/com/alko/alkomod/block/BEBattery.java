@@ -1,10 +1,13 @@
 package com.alko.alkomod.block;
 
+import com.alko.alkomod.Items.WrenchItem;
 import com.alko.alkomod.block.blockentity.BEBatteryBlockEntity;
+import com.alko.alkomod.block.blockentity.EnergySide;
 import com.alko.alkomod.block.blockentity.ModBlockEntity;
 import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
 import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -44,9 +47,15 @@ public class BEBattery extends Block implements EntityBlock {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof BEBatteryBlockEntity batteryBlock){
                 if(!player.isCrouching()){
-                    NetworkHooks.openScreen((ServerPlayer) player, batteryBlock, pos);
+                    if(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof WrenchItem){
+                        Direction dir = hit.getDirection();
+                        EnergySide curr = batteryBlock.getSideMode(dir);
+                        batteryBlock.setSideMode(dir,curr.next());
+                    }else{
+                        NetworkHooks.openScreen((ServerPlayer) player, batteryBlock,pos);
+                    }
                 }else{
-                    System.out.println(((IBeerEnergyStorageBlock) batteryBlock).getStoredEnergy());
+                    System.out.println(batteryBlock.getStoredEnergy());
                 }
             }
 
