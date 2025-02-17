@@ -21,6 +21,7 @@ public class ModMenuTypes {
             registerMenuType("be_battery_menu", BEBatteryMenu::new);
 
 
+
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }

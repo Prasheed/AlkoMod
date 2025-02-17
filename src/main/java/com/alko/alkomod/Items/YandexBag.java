@@ -1,18 +1,19 @@
 package com.alko.alkomod.Items;
 
-import com.alko.alkomod.Items.client.HuTaoRenderer;
-import com.alko.alkomod.Items.client.WingsArmorRenderer;
 import com.alko.alkomod.Items.client.YandexBagItemRenderer;
 import com.alko.alkomod.Items.client.YandexBagRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
@@ -77,4 +78,5 @@ public class YandexBag extends ArmorItem implements GeoItem {
             }
         });
     }
+
 }
