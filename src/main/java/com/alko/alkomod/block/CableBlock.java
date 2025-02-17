@@ -1,8 +1,17 @@
 package com.alko.alkomod.block;
 
+import com.alko.alkomod.Items.WrenchItem;
+import com.alko.alkomod.energy.EnergySystemUtils;
 import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -11,11 +20,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class CableBlock extends Block {
@@ -90,5 +101,25 @@ public class CableBlock extends Block {
         if (state.getValue(UP)) shape = Shapes.or(shape, Shapes.box(0.3, 0.7, 0.3, 0.7, 1, 0.7));
         if (state.getValue(DOWN)) shape = Shapes.or(shape, Shapes.box(0.3, 0, 0.3, 0.7, 0.3, 0.7));
         return shape;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if(!level.isClientSide()){
+            if(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof WrenchItem && hand == InteractionHand.MAIN_HAND){
+                Map<String, HashSet<BlockPos>> list = EnergySystemUtils.buildNetwork(pos,level);
+                player.sendSystemMessage(Component.literal("Найдено блоков потребителей "+list.get("INPUT").size()));
+                player.sendSystemMessage(Component.literal("Найдено блоков генераторов "+list.get("OUTPUT").size()));
+                list.get("INPUT").forEach(blockPos -> {
+                    ((ServerLevel) level).sendParticles((ServerPlayer) player, ParticleTypes.END_ROD, true, blockPos.getX()+0.6,blockPos.getY()+1.2, blockPos.getZ()+0.6,10, 0.02, 0.02, 0.02, 0.0002);
+                });
+                list.get("OUTPUT").forEach(blockPos -> {
+                    ((ServerLevel) level).sendParticles((ServerPlayer) player, ParticleTypes.END_ROD, true, blockPos.getX()+0.6,blockPos.getY()+1.2, blockPos.getZ()+0.6,10, 0.02, 0.02, 0.02, 0.0002);
+                });
+            }
+        }
+
+
+        return super.use(state,level,pos,player,hand,hit);
     }
 }
