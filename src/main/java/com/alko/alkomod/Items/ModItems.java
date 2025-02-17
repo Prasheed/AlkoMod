@@ -26,6 +26,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> GLIDER = CreativeTab.addToTab(ITEMS.register("glider", () -> new GliderItem(new Item.Properties())));
 
+    public static final RegistryObject<Item> YANDEX_BAG = CreativeTab.addToTab(ITEMS.register("yandex_bag", YandexBag::new));
+
     public static final RegistryObject<Item> BATTERY_ITEM = CreativeTab.addToTab(ITEMS.register("battery_item", BatteryItem::new));
 
     public static final RegistryObject<Item> GENERATOR_BLOCK_ITEM = CreativeTab.addToTab(ITEMS.register("generator_block", () -> new GeneratorBlockItem(ModBlocks.GENERATOR_BLOCK.get(),new Item.Properties())));
@@ -35,6 +37,7 @@ public class ModItems {
     public static final RegistryObject<Item> HU_TAO = CreativeTab.addToTab(ITEMS.register("hu_tao", () -> new HuTao(new Item.Properties())));
 
     public static final RegistryObject<Item> WRENCH = CreativeTab.addToTab(ITEMS.register("wrench", () -> new WrenchItem(new Item.Properties())));
+
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);

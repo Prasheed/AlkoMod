@@ -29,8 +29,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.plaf.basic.BasicComboBoxUI;
-
 public class BEBatteryBlockEntity extends BEBlockEntity implements MenuProvider, TickableBlockEntity {
     private final ItemStackHandler itemHandler = new ItemStackHandler(2){
         @Override

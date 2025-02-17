@@ -5,13 +5,15 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    ANGEL_WINGS("angel_wings", 26, new int[]{ 0, 0, 0, 0 }, 25,
-            SoundEvents.ARMOR_EQUIP_ELYTRA, 1f, 0f, () -> Ingredient.of(Items.FEATHER));
+    ANGEL_WINGS("angel_wings", 0, new int[]{ 0, 0, 0, 0 }, 25,
+            SoundEvents.ARMOR_EQUIP_ELYTRA, 1f, 0f, () -> Ingredient.of(Items.FEATHER)),
+
+    YANDEX_ARMOR("yandex_armor", 0, new int[]{ 0, 2, 1, 0 }, 25,
+    SoundEvents.ARMOR_EQUIP_ELYTRA, 1f, 0f, () -> Ingredient.of(Items.LEATHER));
 
     private final String name;
     private final int durabilityMultiplier;

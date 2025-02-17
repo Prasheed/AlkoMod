@@ -78,7 +78,7 @@ public class WingsItem extends ArmorItem implements GeoItem {
     @SuppressWarnings("deprecation")
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("duration")){
             if (PlayerInputHandler.isHoldingSpace(player)){
                 if (tag.getInt("duration") > 0){
