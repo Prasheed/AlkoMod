@@ -62,12 +62,24 @@ public class YandexBag extends ArmorItem implements GeoItem {
             private YandexBagRenderer renderer;
             private YandexBagItemRenderer renderar;
 
+
+            @Override
+            public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack,
+                                                                   EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+                if (this.renderer == null)
+                    this.renderer = new YandexBagRenderer();
+
+                this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
+                return this.renderer;
+            }
+
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderar == null) {
+                if(this.renderar == null) {
                     renderar = new YandexBagItemRenderer();
                 }
-                return renderar;
+
+                return this.renderar;
             }
         });
     }
