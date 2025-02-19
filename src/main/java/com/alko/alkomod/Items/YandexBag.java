@@ -3,7 +3,9 @@ package com.alko.alkomod.Items;
 import com.alko.alkomod.Items.client.YandexBagItemRenderer;
 import com.alko.alkomod.Items.client.YandexBagRenderer;
 import com.alko.alkomod.capability.ModCapabilitiesRegister;
+import com.alko.alkomod.energy.IBeerEnergyStorageItem;
 import com.alko.alkomod.screen.CounterMenu;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +20,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -31,14 +34,21 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.RenderUtils;
 
+import java.util.List;
 import java.util.function.Consumer;
 
-public class YandexBag extends ArmorItem implements GeoItem {
+public class YandexBag extends BeerEnergyArmorItem implements GeoItem, IBeerEnergyStorageItem {
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     public YandexBag() {
-        super(ModArmorMaterials.YANDEX_ARMOR, Type.CHESTPLATE, new Properties().rarity(Rarity.RARE));
+        super(ModArmorMaterials.YANDEX_ARMOR, Type.CHESTPLATE, new Properties().rarity(Rarity.RARE), 3000, 500, 500);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.literal("Сделана в память о сумки Валоди с бутылками.").withStyle(ChatFormatting.BLUE));
+        tooltip.add(Component.literal("Энергия: " + getStoredEnergy(stack) + " / " + getMaxEnergy(stack)).withStyle(ChatFormatting.GREEN));
     }
 
     @Override
@@ -113,7 +123,7 @@ public class YandexBag extends ArmorItem implements GeoItem {
 
         CompoundTag finalTag = tag;
         stack.getCapability(ModCapabilitiesRegister.INVENTORY_DATA).ifPresent(data -> {
-            finalTag.put("inventoryData", data.serializeNBT()); // Сохраняем инвентарь
+            finalTag.put("inventoryData", data.serializeNBT());
         });
 
         return tag;
@@ -124,9 +134,10 @@ public class YandexBag extends ArmorItem implements GeoItem {
         super.readShareTag(stack, nbt);
         if (nbt != null && nbt.contains("inventoryData")) {
             stack.getCapability(ModCapabilitiesRegister.INVENTORY_DATA).ifPresent(data -> {
-                data.deserializeNBT(nbt.getCompound("inventoryData")); // Загружаем инвентарь
+                data.deserializeNBT(nbt.getCompound("inventoryData"));
             });
         }
     }
+
 
 }

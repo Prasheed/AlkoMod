@@ -11,9 +11,22 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class CounterScreen extends AbstractContainerScreen<CounterMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Alkomod.MOD_ID, "textures/gui/screen/yandex_bag_screen.png");
+    int storedEnergy;
+    int capacity;
+    int x;
+    int y;
 
     public CounterScreen(CounterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
+        this.storedEnergy = menu.storedEnergy;
+        this.capacity = menu.capacity;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        x = (width - imageWidth) / 2;
+        y = (height - imageHeight) / 2;
     }
 
     @Override
@@ -23,13 +36,19 @@ public class CounterScreen extends AbstractContainerScreen<CounterMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-        int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
-        guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(TEXTURE, this.x, this.y, 0, 0, this.imageWidth, this.imageHeight);
+        renderBar(guiGraphics);
     }
 
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    private void renderBar(GuiGraphics pGuiGraphics){
+        int energyCount = menu.getScaledEneryCount();
+        int u = 176;
+        int v = 0;
+        pGuiGraphics.blit(TEXTURE, this.x+143, this.y+76-energyCount, u, v, 20, energyCount);
     }
 }

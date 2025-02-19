@@ -1,10 +1,12 @@
 package com.alko.alkomod.screen;
 
+import com.alko.alkomod.Items.BeerEnergyArmorItem;
 import com.alko.alkomod.capability.ModCapabilitiesRegister;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
@@ -13,7 +15,8 @@ import net.minecraftforge.items.SlotItemHandler;
 public class CounterMenu extends AbstractContainerMenu {
     private final ItemStack stack;
     private final ItemStackHandler inventory;
-
+    int storedEnergy;
+    int capacity;
     public CounterMenu(int id, Inventory playerInv, FriendlyByteBuf buffer) {
         this(id, playerInv, buffer.readItem());
     }
@@ -21,7 +24,10 @@ public class CounterMenu extends AbstractContainerMenu {
     public CounterMenu(int id, Inventory playerInv, ItemStack stack) {
         super(ModMenuTypes.COUNTER_MENU.get(), id);
         this.stack = stack;
-
+        if(stack.getItem() instanceof BeerEnergyArmorItem item){
+             this.storedEnergy = item.getStoredEnergy(stack);
+             this.capacity = item.getMaxEnergy(stack);
+        }
         this.inventory = new ItemStackHandler(15) {
             @Override
             protected void onContentsChanged(int slot) {
@@ -76,5 +82,12 @@ public class CounterMenu extends AbstractContainerMenu {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
+    }
+
+    public int getScaledEneryCount() {
+        int stored = this.storedEnergy; // Текущий уровень энергии
+        int max = this.capacity;    // Максимальный уровень энергии
+        int energyBarHeight = 68;      // Полная высота индикатора в пикселях
+        return (max != 0 && stored != 0) ? (int) (((float) stored / max) * energyBarHeight) : 0;
     }
 }
