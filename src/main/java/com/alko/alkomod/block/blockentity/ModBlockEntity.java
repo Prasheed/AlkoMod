@@ -24,6 +24,11 @@ public class ModBlockEntity {
                     BlockEntityType.Builder.of(BEBatteryBlockEntity::new,
                             ModBlocks.BE_BATTERY_BLOCK.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<CableBlockBlockEntity>> CABLE_BLOCK_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("cable_block_block_entity", () ->
+                    BlockEntityType.Builder.of(CableBlockBlockEntity::new,
+                            ModBlocks.BASIC_CABLE_BLOCK.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<BEGeneratorBlockEntity>> BE_GENERATOR_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("be_generator_block_entity", () -> BlockEntityType.Builder.of(BEGeneratorBlockEntity::new, ModBlocks.BE_GENERATOR_BLOCK.get()).build(null));
 

@@ -6,8 +6,13 @@ public enum EnergySide {
     OUTPUT;     // Выход энергии
 
     public EnergySide next() {
-        // Получаем следующий индекс по кругу
         int nextOrdinal = (this.ordinal() + 1) % EnergySide.values().length;
         return EnergySide.values()[nextOrdinal];
     }
+
+    public EnergySide previous() {
+        int prevOrdinal = (this.ordinal() - 1 + EnergySide.values().length) % EnergySide.values().length;
+        return EnergySide.values()[prevOrdinal];
+    }
+
 }

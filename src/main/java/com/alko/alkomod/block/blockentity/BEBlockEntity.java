@@ -1,7 +1,12 @@
 package com.alko.alkomod.block.blockentity;
 
 import com.alko.alkomod.Alkomod;
+import com.alko.alkomod.energy.EnergyNetwork;
+import com.alko.alkomod.energy.EnergyNetworkList;
+import com.alko.alkomod.energy.EnergySystemUtils;
 import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
+import com.alko.alkomod.util.EnergyUtils;
+import com.alko.alkomod.util.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -12,15 +17,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-public  abstract class BEBlockEntity extends BlockEntity implements IBeerEnergyStorageBlock {
+public  abstract class BEBlockEntity extends BlockEntity implements IBeerEnergyStorageBlock, TickableBlockEntity {
     public static final ModelProperty<Map<Direction, EnergySide>> ENERGY_SIDES = new ModelProperty<>();
+    HashSet<BEBlockEntity> inputs = new HashSet<>();
     Map<Direction, EnergySide> sideConfig = new HashMap<>();
     int capacity;
     int maxExtract;
@@ -38,6 +44,21 @@ public  abstract class BEBlockEntity extends BlockEntity implements IBeerEnergyS
         this.storedEnergy = 0;
     }
 
+    @Override
+    public void tick() {
+        tryChargeInputs();
+    }
+
+    public HashSet<BEBlockEntity> getInputs() {
+        return inputs;
+    }
+
+    private void tryChargeInputs() {
+        int inputsAmount = inputs.size();
+        inputs.forEach(blockEntity -> {
+            EnergyUtils.transferEnergy(this, blockEntity, storedEnergy/inputsAmount);
+        });
+    }
 
     @Override
     public int receiveEnergy(int amount, boolean simulate) {
@@ -157,12 +178,33 @@ public  abstract class BEBlockEntity extends BlockEntity implements IBeerEnergyS
         sideConfig.put(dir, mode);
         if (level != null) {
             setChanged();  // Уведомляем Minecraft, что данные изменились
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
         }
     }
 
     public EnergySide getSideMode(Direction dir) {
         return sideConfig.getOrDefault(dir, EnergySide.NONE);
     }
+
+    public void nextModeForSide(Direction dir) {
+        EnergySide curr = getSideMode(dir);
+        setSideMode(dir,curr.next());
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        BEBlockEntity that = (BEBlockEntity) obj;
+        return this.worldPosition.equals(that.worldPosition);
+    }
+
+    @Override
+    public int hashCode() {
+        return worldPosition.hashCode();
+    }
+
 }
 

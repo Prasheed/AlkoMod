@@ -77,9 +77,7 @@ public class BEGeneratorBlock extends HorizontalDirectionalBlock implements Enti
             if(be instanceof BEGeneratorBlockEntity blockEntity){
                 if(pPlayer.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof WrenchItem){
                     Direction dir = pHit.getDirection();
-                    EnergySide curr = blockEntity.getSideMode(dir);
-                    System.out.println(curr.name());
-                    blockEntity.setSideMode(dir,curr.next());
+                    blockEntity.nextModeForSide(dir);
                 }else{
                     NetworkHooks.openScreen((ServerPlayer) pPlayer, blockEntity,pPos);
                 }

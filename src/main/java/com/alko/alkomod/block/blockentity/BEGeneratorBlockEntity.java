@@ -28,7 +28,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BEGeneratorBlockEntity extends BEBlockEntity implements TickableBlockEntity, MenuProvider {
+public class BEGeneratorBlockEntity extends BEBlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(3){
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
@@ -161,6 +161,7 @@ public class BEGeneratorBlockEntity extends BEBlockEntity implements TickableBlo
 
     @Override
     public void tick() {
+        super.tick();
         if(this.isLit()){
             this.litTime--;
             setChanged();

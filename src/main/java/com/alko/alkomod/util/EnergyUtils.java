@@ -1,5 +1,6 @@
 package com.alko.alkomod.util;
 
+import com.alko.alkomod.block.blockentity.BEBlockEntity;
 import com.alko.alkomod.energy.IBeerEnergyStorageBlock;
 import com.alko.alkomod.energy.IBeerEnergyStorageItem;
 import net.minecraft.world.item.ItemStack;
@@ -62,8 +63,7 @@ public class EnergyUtils {
         return received;
     }
 
-    public static int transferMaxPossibleEnergy(IBeerEnergyStorageBlock source,
-                                     IBeerEnergyStorageItem target, ItemStack targetStack) {
+    public static int transferMaxPossibleEnergy(IBeerEnergyStorageBlock source, IBeerEnergyStorageItem target, ItemStack targetStack) {
         int transferAmount = Math.min(source.getMaxExtract(), target.getMaxReceive());
         int extracted = source.extractEnergy(transferAmount, true);
         int received = target.receiveEnergy(targetStack, extracted, true);
@@ -71,6 +71,16 @@ public class EnergyUtils {
         extracted = source.extractEnergy(received, false);
         received = target.receiveEnergy(targetStack, extracted, false);
 
+        return received;
+    }
+
+    public static int transferMaxPossibleEnergy(BEBlockEntity source, BEBlockEntity target) {
+        int transferAmount = Math.min(source.getMaxExtract(), target.getMaxReceive());
+        int extracted = source.extractEnergy(transferAmount, true);
+        int received = target.receiveEnergy(extracted, true);
+
+        extracted = source.extractEnergy(received, false);
+        received = target.receiveEnergy(extracted, false);
         return received;
     }
 }
