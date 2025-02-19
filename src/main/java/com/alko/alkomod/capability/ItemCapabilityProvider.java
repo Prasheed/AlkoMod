@@ -2,8 +2,8 @@ package com.alko.alkomod.capability;
 
 import com.alko.alkomod.Alkomod;
 import com.alko.alkomod.Items.YandexBag;
-import com.alko.alkomod.util.CountData;
-import com.alko.alkomod.util.ICountData;
+import com.alko.alkomod.util.IItemStackHandlerData;
+import com.alko.alkomod.util.ItemStackHandlerData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -17,34 +17,32 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Alkomod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ItemCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    private final CountData countData = new CountData(); // Объект с нашими данными
-    private final LazyOptional<ICountData> instance = LazyOptional.of(() -> countData);
+    private final ItemStackHandlerData inventoryData = new ItemStackHandlerData(15); // 15 слотов (5x3)
+    private final LazyOptional<IItemStackHandlerData> inventoryInstance = LazyOptional.of(() -> inventoryData);
 
-    // Возвращаем Capability, если он запрашивается
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        return cap == ModCapabilitiesRegister.COUNT_DATA ? instance.cast() : LazyOptional.empty();
+        return cap == ModCapabilitiesRegister.INVENTORY_DATA ? inventoryInstance.cast() : LazyOptional.empty();
     }
 
-    // Сохранение данных в NBT, чтобы они сохранялись в мире
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("count", countData.getCount()); // Сохраняем число
+        tag.put("inventoryData", inventoryData.serializeNBT()); // Сохраняем инвентарь в NBT
         return tag;
     }
 
-    // Восстанавливаем данные из NBT
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        countData.setCount(nbt.getInt("count"));
+        if (nbt.contains("inventoryData")) {
+            inventoryData.deserializeNBT(nbt.getCompound("inventoryData")); // Загружаем инвентарь
+        }
     }
 
-    // Присоединяем Capability к предмету
     @SubscribeEvent
     public static void attachCapability(AttachCapabilitiesEvent<ItemStack> event) {
-        if (event.getObject().getItem() instanceof YandexBag) { // Проверяем, что предмет - наш
-            event.addCapability(new ResourceLocation(Alkomod.MOD_ID, "count_data"), new ItemCapabilityProvider());
+        if (event.getObject().getItem() instanceof YandexBag) {
+            event.addCapability(new ResourceLocation(Alkomod.MOD_ID, "inventory_data"), new ItemCapabilityProvider());
         }
     }
 }

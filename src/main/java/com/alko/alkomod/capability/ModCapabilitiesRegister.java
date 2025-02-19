@@ -2,6 +2,7 @@ package com.alko.alkomod.capability;
 
 import com.alko.alkomod.Alkomod;
 import com.alko.alkomod.util.ICountData;
+import com.alko.alkomod.util.IItemStackHandlerData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +20,9 @@ public class ModCapabilitiesRegister {
 
     // Создаём уникальный Capability для хранения нашего счётчика
     public static final Capability<ICountData> COUNT_DATA = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IItemStackHandlerData> INVENTORY_DATA = CapabilityManager.get(new CapabilityToken<>() {});
+
+
 
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
@@ -43,5 +47,6 @@ public class ModCapabilitiesRegister {
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(PlayerAnimationCapability.class);
+        event.register(IItemStackHandlerData.class);
     }
 }

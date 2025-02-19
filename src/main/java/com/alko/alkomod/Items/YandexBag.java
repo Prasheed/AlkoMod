@@ -4,7 +4,6 @@ import com.alko.alkomod.Items.client.YandexBagItemRenderer;
 import com.alko.alkomod.Items.client.YandexBagRenderer;
 import com.alko.alkomod.capability.ModCapabilitiesRegister;
 import com.alko.alkomod.screen.CounterMenu;
-import com.alko.alkomod.util.ICountData;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -22,10 +21,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,12 +31,11 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.RenderUtils;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class YandexBag extends ArmorItem implements GeoItem {
 
-    private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     public YandexBag() {
         super(ModArmorMaterials.YANDEX_ARMOR, Type.CHESTPLATE, new Properties().rarity(Rarity.RARE));
@@ -63,69 +57,40 @@ public class YandexBag extends ArmorItem implements GeoItem {
     }
 
     @Override
-    public double getTick(Object itemStack) {
-        return RenderUtils.getCurrentTick();
-    }
-
-    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private YandexBagRenderer renderer;
             private YandexBagItemRenderer renderar;
 
-
-            @Override
-            public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack,
-                                                                   EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-                if (this.renderer == null)
-                    this.renderer = new YandexBagRenderer();
-
-                this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
-                return this.renderer;
-            }
-
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if(this.renderar == null) {
+                if (renderar == null) {
                     renderar = new YandexBagItemRenderer();
                 }
-
-                return this.renderar;
+                return renderar;
             }
         });
     }
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        if (!context.getLevel().isClientSide()){
+        if (!context.getLevel().isClientSide()) {
             ItemStack stack = context.getItemInHand();
             ServerPlayer player = (ServerPlayer) context.getPlayer();
-            if (player != null) {
-                if (player.isCrouching()) {
-                    // Открываем GUI
-                    NetworkHooks.openScreen(player, new MenuProvider() {
-                        @Override
-                        public Component getDisplayName() {
-                            return Component.literal("Счётчик");
-                        }
+            if (player != null && player.isCrouching()) {
+                NetworkHooks.openScreen(player, new MenuProvider() {
+                    @Override
+                    public Component getDisplayName() {
+                        return Component.literal("YandexBag");
+                    }
 
-                        @Override
-                        public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                            return new CounterMenu(id, inventory, stack);
-                        }
-                    }, buffer -> buffer.writeItem(stack)); // Передаём предмет в буфер
-                } else {
-                    // Увеличиваем число
-                    LazyOptional<ICountData> cap = stack.getCapability(ModCapabilitiesRegister.COUNT_DATA);
-                    cap.ifPresent(data -> {
-                        data.increment();
-                        int count = data.getCount();
-                        player.sendSystemMessage(Component.literal("Текущее число: " + count));
-                    });
-                }
+                    @Override
+                    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+                        return new CounterMenu(id, inventory, stack);
+                    }
+                }, buffer -> buffer.writeItem(stack));
             }
         }
-
         return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
     }
 
@@ -134,10 +99,9 @@ public class YandexBag extends ArmorItem implements GeoItem {
         CompoundTag tag = super.getShareTag(stack);
         if (tag == null) tag = new CompoundTag();
 
-        // Сохраняем Capability в NBT
         CompoundTag finalTag = tag;
-        stack.getCapability(ModCapabilitiesRegister.COUNT_DATA).ifPresent(data -> {
-            finalTag.put("countData", data.serializeNBT());
+        stack.getCapability(ModCapabilitiesRegister.INVENTORY_DATA).ifPresent(data -> {
+            finalTag.put("inventoryData", data.serializeNBT()); // Сохраняем инвентарь
         });
 
         return tag;
@@ -146,10 +110,11 @@ public class YandexBag extends ArmorItem implements GeoItem {
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
         super.readShareTag(stack, nbt);
-        if (nbt != null && nbt.contains("countData")) {
-            stack.getCapability(ModCapabilitiesRegister.COUNT_DATA).ifPresent(data -> {
-                data.deserializeNBT(nbt.getCompound("countData"));
+        if (nbt != null && nbt.contains("inventoryData")) {
+            stack.getCapability(ModCapabilitiesRegister.INVENTORY_DATA).ifPresent(data -> {
+                data.deserializeNBT(nbt.getCompound("inventoryData")); // Загружаем инвентарь
             });
         }
     }
+
 }
