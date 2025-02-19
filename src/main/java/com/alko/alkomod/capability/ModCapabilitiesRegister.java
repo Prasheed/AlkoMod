@@ -1,9 +1,13 @@
 package com.alko.alkomod.capability;
 
 import com.alko.alkomod.Alkomod;
+import com.alko.alkomod.util.ICountData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -12,6 +16,10 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Alkomod.MOD_ID)
 public class ModCapabilitiesRegister {
+
+    // Создаём уникальный Capability для хранения нашего счётчика
+    public static final Capability<ICountData> COUNT_DATA = CapabilityManager.get(new CapabilityToken<>() {});
+
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {

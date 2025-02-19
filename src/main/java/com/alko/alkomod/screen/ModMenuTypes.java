@@ -20,6 +20,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<BEBatteryMenu>> BE_BATTERY_MENU =
             registerMenuType("be_battery_menu", BEBatteryMenu::new);
 
+    public static final RegistryObject<MenuType<CounterMenu>> COUNTER_MENU =
+            registerMenuType("counter_menu", CounterMenu::new);
+
 
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
