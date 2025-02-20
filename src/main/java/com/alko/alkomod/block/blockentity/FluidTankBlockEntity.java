@@ -31,7 +31,7 @@ public class FluidTankBlockEntity extends BlockEntity implements MenuProvider, T
     private static final Component TITLE =
             Component.literal("pizda");
 
-    private final ItemStackHandler inventory = new ItemStackHandler(1) {
+    private final ItemStackHandler inventory = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
@@ -61,21 +61,22 @@ public class FluidTankBlockEntity extends BlockEntity implements MenuProvider, T
             return;
 
         ItemStack stack = this.inventory.getStackInSlot(0);
-        if(stack.isEmpty())
+        ItemStack stack1 = this.inventory.getStackInSlot(1);
+        if(stack.isEmpty() && stack1.isEmpty())
             return;
 
-        if(this.fluidTank.getFluidAmount() >= this.fluidTank.getCapacity())
-            return;
+//        if(this.fluidTank.getFluidAmount() >= this.fluidTank.getCapacity())
+//            return;
 
         LazyOptional<IFluidHandlerItem> fluidHandler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
         fluidHandler.ifPresent(iFluidHandlerItem -> {
+
             if (!fluidTank.getFluid().isEmpty())
                 if(!this.fluidTank.getFluid().isFluidEqual(iFluidHandlerItem.getFluidInTank(0)))
                     return;
 
             int amountToDrain = this.fluidTank.getCapacity() - this.fluidTank.getFluidAmount();
             int amount = iFluidHandlerItem.drain(amountToDrain, IFluidHandler.FluidAction.SIMULATE).getAmount();
-            System.out.println(amount +" " + amountToDrain);
             if(amount > 0) {
                 this.fluidTank.fill(iFluidHandlerItem.drain(amountToDrain, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
 
@@ -85,6 +86,20 @@ public class FluidTankBlockEntity extends BlockEntity implements MenuProvider, T
             }
         });
 
+        LazyOptional<IFluidHandlerItem> fluidHandler1 = stack1.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+        fluidHandler1.ifPresent(iFluidHandlerItem1 -> {
+
+            if (!fluidTank.getFluid().isEmpty() && iFluidHandlerItem1.getFluidInTank(0).isEmpty()){
+                int amountToFill = iFluidHandlerItem1.getTankCapacity(0);
+                if (fluidTank.getFluidAmount() >= amountToFill) {
+                    iFluidHandlerItem1.fill(fluidTank.drain(amountToFill, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                    this.inventory.setStackInSlot(1, iFluidHandlerItem1.getContainer());
+
+                }
+
+
+            }
+        });
 
 
     }

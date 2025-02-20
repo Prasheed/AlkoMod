@@ -42,6 +42,7 @@ public class FluidTankBlockMenu extends AbstractContainerMenu {
     private void createBlockEntityInventory(FluidTankBlockEntity be) {
         be.getInventoryOptional().ifPresent(inventory -> {
             addSlot(new FluidContainerSlot(inventory, 0, 44, 36));
+            addSlot(new FluidContainerSlot(inventory, 1, 116, 36));
         });
     }
 
