@@ -23,6 +23,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<CounterMenu>> COUNTER_MENU =
             registerMenuType("counter_menu", CounterMenu::new);
 
+    public static final RegistryObject<MenuType<FluidTankBlockMenu>> FLUID_TANK_MENU =
+            registerMenuType("fluid_tank_menu", FluidTankBlockMenu::new);
+
 
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {

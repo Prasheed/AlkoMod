@@ -28,6 +28,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> BE_BATTERY_BLOCK = registerBlock("be_battery_block",
             BEBattery::new);
+
+    public static final RegistryObject<Block> FLUID_TANK_BLOCK = registerBlock("fluid_tank_block",
+            FluidTankBlock::new);
     //public static final RegistryObject<Block> SIMPLE_ENERGY_GENERATOR_BLOCK = registerBlock("simple_energy_generator_block",
     //        SimpleEnergyGeneratorBlock::new);
 

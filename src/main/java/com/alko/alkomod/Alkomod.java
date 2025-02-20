@@ -85,6 +85,7 @@ public class Alkomod
             MenuScreens.register(ModMenuTypes.BE_GENERATOR_BLOCK_MENU.get(), BEGeneratorBlockScreen::new);
             MenuScreens.register(ModMenuTypes.BE_BATTERY_MENU.get(), BEBatteryScreen::new);
             MenuScreens.register(ModMenuTypes.COUNTER_MENU.get(), CounterScreen::new);
+            MenuScreens.register(ModMenuTypes.FLUID_TANK_MENU.get(), FluidTankBlockScreen::new);
             BlockEntityRenderers.register(ModBlockEntity.GENERATOR_BLOCK_ENTITY.get(), GeneratorBlockRenderer::new);
             EntityRenderers.register(ModEntities.POTBELLY.get(), PotbellyRenderer::new);
         }

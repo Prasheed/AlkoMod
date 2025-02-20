@@ -24,6 +24,12 @@ public class ModBlockEntity {
                     BlockEntityType.Builder.of(BEBatteryBlockEntity::new,
                             ModBlocks.BE_BATTERY_BLOCK.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<FluidTankBlockEntity>> FLUID_TANK_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("fluid_tank_block_entity", () ->
+                    BlockEntityType.Builder.of(FluidTankBlockEntity::new,
+                            ModBlocks.FLUID_TANK_BLOCK.get()).build(null));
+
+
     public static final RegistryObject<BlockEntityType<BEGeneratorBlockEntity>> BE_GENERATOR_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("be_generator_block_entity", () -> BlockEntityType.Builder.of(BEGeneratorBlockEntity::new, ModBlocks.BE_GENERATOR_BLOCK.get()).build(null));
 
